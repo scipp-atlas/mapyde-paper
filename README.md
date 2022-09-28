@@ -1,3 +1,5 @@
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit) | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/scipp-atlas/mapyde-paper/main.svg)](https://results.pre-commit.ci/latest/github/scipp-atlas/mapyde-paper/main)
+
 # To compile
 
 ```
