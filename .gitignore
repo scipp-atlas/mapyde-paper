@@ -288,3 +288,7 @@ TSWLatexianTemp*
 #*Notes.bib
 
 .DS_Store
+deploy/*.png
+deploy/main.html
+deploy/main.js
+deploy/LaTeXML.cache
