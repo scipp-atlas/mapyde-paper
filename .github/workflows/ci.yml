@@ -33,7 +33,7 @@ jobs:
       - name: Upload document
         uses: actions/upload-artifact@v3
         with:
-          name: main
+          name: artifacts
           path: main.pdf
 
   prepare_website:
@@ -55,7 +55,7 @@ jobs:
 
       - name: Move to deploy directory
         run: |
-          mv main.pdf deploy/main.pdf
+          mv artifacts/main.pdf deploy/main.pdf
 
       - name: List documents
         run: ls -R
