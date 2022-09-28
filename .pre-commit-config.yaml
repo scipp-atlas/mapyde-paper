@@ -1,6 +1,7 @@
 ci:
   autoupdate_commit_msg: "chore: [pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: monthly
+  skip: [biber-autoformat]
 
 repos:
   - repo: https://github.com/jonasbb/pre-commit-latex-hooks
