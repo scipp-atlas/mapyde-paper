@@ -43,7 +43,7 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v3
       - name: Convert to HTML5
-        run: html5.sh
+        run: . ./html5.sh
       - name: Upload document
         uses: actions/upload-artifact@v3
         with:
