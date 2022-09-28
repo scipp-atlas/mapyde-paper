@@ -41,10 +41,9 @@ jobs:
     container: latexml/ar5ivist:2208.01
     steps:
       - name: Convert to HTML5
-        args:
-          - --destination=html/main.html
-          - --javascript=main.js
-        run: echo ignore
+        run: |
+          --destination=html/main.html
+          --javascript=main.js
       - name: Upload document
         uses: actions/upload-artifact@v3
         with:
