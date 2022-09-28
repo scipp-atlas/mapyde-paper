@@ -33,7 +33,7 @@ jobs:
       - name: Upload document
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts
+          name: artifacts-pdf
           path: main.pdf
 
   render_html5:
@@ -47,12 +47,14 @@ jobs:
       - name: Upload document
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts
+          name: artifacts-html
           path: html/
 
   prepare_website:
     runs-on: ubuntu-latest
-    needs: build_latex
+    needs:
+      - build_latex
+      - render_html5
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v3
@@ -69,8 +71,8 @@ jobs:
 
       - name: Move to deploy directory
         run: |
-          mv artifacts/main.pdf deploy/main.pdf
-          mv artifacts/main.html deploy/main.html
+          mv artifacts-pdf/main.pdf deploy/main.pdf
+          mv artifacts-html/* deploy/.
 
       - name: List documents
         run: ls -R
