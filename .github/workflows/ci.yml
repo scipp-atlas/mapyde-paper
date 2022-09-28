@@ -36,6 +36,20 @@ jobs:
           name: artifacts
           path: main.pdf
 
+  render_html5:
+    runs-on: ubuntu-latest
+    container: latexml/ar5ivist:2208.01
+    steps:
+      - name: Convert to HTML5
+        args:
+          - --destination=html/main.html
+          - --javascript=main.js
+      - name: Upload document
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: html/
+
   prepare_website:
     runs-on: ubuntu-latest
     needs: build_latex
@@ -56,6 +70,7 @@ jobs:
       - name: Move to deploy directory
         run: |
           mv artifacts/main.pdf deploy/main.pdf
+          mv artifacts/main.html deploy/main.html
 
       - name: List documents
         run: ls -R
