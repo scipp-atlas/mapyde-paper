@@ -39,6 +39,7 @@ jobs:
 
   build_latex:
     runs-on: ubuntu-latest
+    needs: [build_feynman]
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v3
@@ -60,6 +61,7 @@ jobs:
 
   render_html5:
     runs-on: ubuntu-latest
+    needs: [build_feynman]
     container: latexml/ar5ivist:2208.01
     steps:
       - name: Set up Git repository
