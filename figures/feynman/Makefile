@@ -1,0 +1,63 @@
+# find all sources
+SRC:=$(shell ls */diagram.tex)
+COMMON:=$(wildcard ./*.tex ./*.fmf)
+
+# make list of plots
+PDF=$(SRC:%/diagram.tex=output/%.pdf)
+SVG=$(SRC:%/diagram.tex=output/%.svg)
+PNG=$(SRC:%/diagram.tex=output/%.png)
+EPS=$(SRC:%/diagram.tex=output/%.eps)
+
+TEXINPUTS:=../../$(add prefix:,$(TEXINPUTS))::
+export TEXINPUTS
+
+# by default make all plots
+plots: $(PDF)
+
+pdf: $(PDF)
+svg: $(SVG)
+png: $(PNG)
+eps: $(EPS)
+
+# shortcut for making one diagram
+%: output/%.pdf;
+
+# rule to make the pdf files
+output/%.pdf: %/diagram.tex $(COMMON)
+	mkdir -p output
+	pdflatex -jobname=$* $<
+	test $*TMP && mpost $*TMP
+	pdflatex -jobname=$* $<
+	pdfcrop --margins 3 $*.pdf $@
+	$(RM) $*.pdf
+	$(RM) $*TMP* $*.aux $*.log
+
+# rule to make the png files
+output/%.png: output/pdf/%.pdf
+	mkdir -p output
+	convert -scale 300x200 -density 600 -quality 100 $< $@
+
+# rule to make the eps files
+output/%.eps: output/pdf/%.pdf
+	mkdir -p output
+	pdf2ps $< $@
+
+# rule to make the svg files
+output/%.svg: %/diagram.tex $(COMMON)
+	mkdir -p output
+	latex -jobname=$* $<
+	test $*TMP && mpost $*TMP
+	latex -jobname=$* $<
+	dvisvgm --no-fonts --output=%f $*.dvi
+	mv $*.svg $@
+	$(RM) $*.dvi
+	$(RM) $*TMP* $*.aux $*.log
+
+# clean unnecessary files
+clean:
+	$(RM) *.aux *.log *.toc *.out *.mp *.1 *.t1 *.dvi *.bcf *.run.xml
+
+# remove all products
+cleaner: clean
+	$(RM) -r output/
+	$(RM) *.pdf

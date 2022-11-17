@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{susyparticles}
+\usepackage{xcolor}
+\usepackage{feynmp}
+\usepackage{subfig}
+\usepackage{rotating}
+\usepackage{ifpdf}
+\ifpdf
+  \DeclareGraphicsRule{*}{mps}{*}{}
+\fi
+%\usepackage[usenames,dvipsnames]{color}
+\def\filename{\jobname TMP}
+
+\begin{document}
+\pagestyle{empty}
+\begin{fmffile}{\filename}
+
+% DEFINE SUSY STYLES
+\fmfcmd{%
+style_def ewkino expr p =
+cdraw (wiggly p);
+cdraw p;
+enddef;}
