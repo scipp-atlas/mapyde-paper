@@ -292,3 +292,6 @@ deploy/*.png
 deploy/main.html
 deploy/main.js
 deploy/LaTeXML.cache
+
+# feynman figures
+figures/feynman/output/*.pdf

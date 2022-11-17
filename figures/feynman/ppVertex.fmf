@@ -1,0 +1,18 @@
+% PROTON PROTON AND PRODUCTION VERTEX
+\fmfleft{,p1,,p2,}
+\fmfv{lab=$p$,lab.an=-120}{p1}
+\fmfv{lab=$p$,lab.an=120}{p2}
+\fmf{plain,tension=3}{p1,ppVertex}
+\fmf{plain,tension=3}{p2,ppVertex}
+\fmfv{d.sh=circle,d.fi=30,d.si=10}{ppVertex}
+\fmf{phantom}{ppVertex,virtual}
+\fmfright{virtual}
+\fmffreeze
+
+\renewcommand{\P}[3]{\fmfi{plain}{%
+vpath(__#1,__#2) shifted (thick*(#3))}}
+\P{p1}{ppVertex}{0.7,-0.7}
+\P{p1}{ppVertex}{-0.7,0.7}
+\P{p2}{ppVertex}{0.7,0.7}
+\P{p2}{ppVertex}{-0.7,-0.7}
+\fmffreeze
