@@ -19,6 +19,7 @@
 \addbibresource{references.bib}
 
 \newcommand{\chioz}{\ensuremath{\widetilde{\chi}_{1}^{0}}}
+\newcommand{\chitz}{\ensuremath{\widetilde{\chi}_{2}^{0}}}
 \newcommand{\met}{\ensuremath{E_{\mathrm{T}}^{\mathrm{miss}}}}
 \newcommand{\mapyde}{\texttt{mapyde}}
 \newcommand{\simpleanalysis}{\texttt{SimpleAnalysis}}
@@ -29,6 +30,8 @@
 \newcommand{\pyhf}{\texttt{pyhf}}
 \newcommand{\musig}{\ensuremath{\mu_{\mathrm{sig}}}}
 \newcommand{\hepdata}{\texttt{HEPData}}
+\newcommand{\hepmc}{\textsc{hepmc}}
+\newcommand{\pt}{\ensuremath{p_{\mathrm{T}}}}
 
 \title{Reduce, Reuse, Reinterpret: an end-to-end pipeline for reinterpreting particle physics results}
 
@@ -143,43 +146,44 @@ We use \mapyde to generate, shower, and simulate SUSY events, to analyze them us
 
 The signal samples produced in our \mapyde{} workflow differ from those used in Ref.~\cite{ATLAS:2019lng} in three significant ways.  First, events in the ATLAS samples contained either one or two jets in the matrix element in addition to a pair of SUSY particles, with the one- and $\geq$ two-jet processes merged in the parton shower using the CKKW-L algorithm.  In our setup, we produce only one-jet events in \madgraph, and allow \pythia{} to model the contributions from additional emissions.  Second, the ATLAS samples use \madspin{} to perform the three-body decays of the electroweakinos to SM leptons and a \chioz, while we perform decays using \pythia.  Third, and most importantly, the ATLAS samples use ATLAS simulation and reconstruction software to transform the \pythia{} output into ROOT files containing physics objects, while we use \delphes.
 
-\textcolor{red}{Acceptance, efficiency, per-lepton efficiencies in the delphes card.}
+The impact of the first two differences is evaluated by comparing the acceptance of the event selection applied to events at particle level.  ATLAS provides the acceptance of the event selection by processing particle-level events with \simpleanalysis{} as part of the public event record of the search.  We perform a similar calculation by passing the \hepmc{} event record from \pythia{} directly into \simpleanalysis{} using \mapyde.  The resulting signal region yields are then compared to the product of the ATLAS acceptance, cross section, branching ratio, and integrated luminosity.  On average we find that the \mapyde{} and ATLAS acceptances are very similar, except for very compressed points where on average the ATLAS acceptance is approximately 10\% higher.
+
+The final difference, between the ATLAS simulation framework and \mapyde, is evaluated using signal yields and model constraints after detector simulation and tuned by modifying the efficiencies in the \delphes{} configuration.  We focus in particular on the treatment of electrons and muons in \delphes, since these also required special handling in the ATLAS analysis.  Further details of the lepton efficiency tuning in \delphes{} are described below.
 
 \subsection{Compressed Sleptons}
 \label{reinterp-slep}
 
-\begin{itemize}
-\item Cross sections, k-factors
-\item Acceptance checks
-\item Reproducing ATLAS results
+We first reproduce the results of the ATLAS search for compressed sleptons.  The ATLAS search is optimized using a slepton-bino model, where the slepton NLSP decays to a bino-like LSP and a charged SM lepton.  We compare the leading-order (LO) cross sections calculated by \madgraph{} in an inclusive sample (without additional emissions) with the next-to-leading-order (NLO) cross sections reported by ATLAS and find a NLO:LO k-factor of 1.18, which is used to scale the one-jet \madgraph{} samples produced with \mapyde.
+
+After the acceptance corrections described above, the lepton efficiencies in \delphes{} are tuned to reproduce the ATLAS signal yields.  The efficiencies of electrons and muons after object selection are provided as part of the public record for Ref.~\cite{ATLAS:2019lng} and are the starting point for the modified \delphes{} configuration used to reproduce the ATLAS results.  We find that setting all electron and muon efficiencies in \delphes{} to the upper range of values reported in Fig. 3 of \cite{ATLAS:2019lng} is sufficient to reproduce the results of the ATLAS slepton and electroweakino searches to adequate precision, as shown in Figs.~\ref{fig:SleptonBino} and \ref{fig:Higgsino} below.  The only exception is the lowest \pt{} bin for both electrons and muons, where the \mapyde{} efficiencies needed to reproduce the ATLAS limits are roughly 15\% higher than the values reported by ATLAS.  Figure~\ref{fig:SleptonBino} also shows the model constraints for the slepton-bino search when using the default \delphes{} configuration card, which does a reasonable job of describing the high-splitting regions, but fails to describe the most compressed mass points, which are most sensitive to the low-\pt{} lepton efficiencies provided by ATLAS.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\textwidth]{{./figures/SleptonBino}}         %% examples/mapyde/SleptonBino_contours.ipynb
-  \caption{Slepton limits}
+  \includegraphics[width=0.5\textwidth]{{./figures/SleptonBino}}         %% examples/mapyde/SleptonBino_contours.ipynb
+  \caption{Constraints on the slepton-bino model from the ATLAS paper~\cite{ATLAS:2019lng} (blue dots), from \mapyde{} before tuning the \delphes{} lepton efficiencies (orange solid), and from \mapyde{} after tuning (blue solid).}
   \label{fig:SleptonBino}
 \end{figure}
 
-\item Describing the slepton-wino-bino model
+With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a ``slepton-wino-bino'' simplified model, where a light slepton decays with 100\% branching ratio to a wino-like \chitz{} NLSP and a SM charged lepton, with the \chitz decaying to a \chioz and two soft fermions, as illustrated in Fig.~\ref{fig:feynman:slepton_wino_bino}.  The \pt{} of the SM lepton will be largely determined by the slepton-\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the slepton-\chioz{} splitting.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.5\textwidth]{{./figures/feynman/output/slepton_wino_bino}}
-  \caption{Feynman Diagram of Slepton-Wino-Bino.}
+  \caption{Feynman diagram of slepton pair production, with slepton decays to wino-like NLSP's, which then decay to bino-like LSP's.}
   \label{fig:feynman:slepton_wino_bino}
 \end{figure}
 
-\item Results
-\end{itemize}
+We parameterize the model in terms of the slepton mass, the slepton-\chioz{} mass gap, and the \chitz-\chioz mass gap, to allow us to display the model constraints in the same plane as the slepton-bino results from ATLAS.  The resulting constraints (both expected and observed) are shown in Fig.~\ref{fig:SleptonWinoBino} for a range of \chitz-\chioz{} splittings.  At small splittings the results resemble those of the slepton-bino model, since the \chitz{} is nearly degenerate with the \chioz{} leading to virtually no kinematic difference arising from the secondary decay of the \chitz.  By contrast, for large \chitz-\chioz{} splittings, given the requirement that the slepton must decay through a \chitz, the constrained parameter space is only at larger slepton-\chioz splittings, and covers a smaller range in slepton masses due to small slepton-\chitz{} splitting leading to softer SM leptons and lower lepton efficiencies.  
 
 \begin{figure}
   \centering
   \includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
   \includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
-  \caption{Slepton-Wino-Bino limits}
+  \caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
   \label{fig:SleptonWinoBino}
 \end{figure}
 
+This class of models, while being less ``simplified'' than the slepton-bino model traditionally studied by LHC experiments, includes models that nominally escape constraint by both existing slepton-bino searches as well as direct searches for electroweakinos.  In particular, the wino-bino constraints reported in Ref.~\cite{ATLAS:2019lng} constrain electroweakinos with \chitz-\chioz{} splittings as low as 1 GeV only for electroweakino masses near 100 GeV, while in the slepton-wino-bino model we can exclude models with 1 GeV \chitz-\chioz{} splittings up to \chioz{} masses of over 200 GeV.  
 
 \subsection{Compressed Electroweakinos}
 \label{reinterp-ewkino}
