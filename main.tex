@@ -19,7 +19,9 @@
 \addbibresource{references.bib}
 
 \newcommand{\chioz}{\ensuremath{\widetilde{\chi}_{1}^{0}}}
+\newcommand{\chiopm}{\ensuremath{\widetilde{\chi}_{1}^{\pm}}}
 \newcommand{\chitz}{\ensuremath{\widetilde{\chi}_{2}^{0}}}
+\newcommand{\chithz}{\ensuremath{\widetilde{\chi}_{3}^{0}}}
 \newcommand{\met}{\ensuremath{E_{\mathrm{T}}^{\mathrm{miss}}}}
 \newcommand{\mapyde}{\texttt{mapyde}}
 \newcommand{\simpleanalysis}{\texttt{SimpleAnalysis}}
@@ -32,8 +34,12 @@
 \newcommand{\hepdata}{\texttt{HEPData}}
 \newcommand{\hepmc}{\textsc{hepmc}}
 \newcommand{\pt}{\ensuremath{p_{\mathrm{T}}}}
+\newcommand{\pmssmfactory}{\texttt{pMSSMFactory}}
+\newcommand{\spheno}{\textsc{Spheno}}
 
-\title{Reduce, Reuse, Reinterpret: an end-to-end pipeline for reinterpreting particle physics results}
+\newcommand{\thistitle}{Reduce, Reuse, Reinterpret: an end-to-end pipeline for recycling particle physics results}
+
+\title{Reduce, Reuse, Reinterpret: an end-to-end pipeline for recycling particle physics results}
 
 %\date{September 9, 1985}	% Here you can change the date presented in the paper title
 %\date{} 					% Or removing it
@@ -75,14 +81,14 @@
 % Uncomment to override  the `A preprint' in the header
 %\renewcommand{\headeright}{Technical Report}
 %\renewcommand{\undertitle}{Technical Report}
-\renewcommand{\shorttitle}{\mapyde{} - an end-to-end pipeline workflow for particle physics}
+\renewcommand{\shorttitle}{\thistitle} %\mapyde{} - an end-to-end pipeline workflow for particle physics}
 
 %%% TODO
 %%% Add PDF metadata to help others organize their library
 %%% Once the PDF is generated, you can check the metadata with
 %%% $ pdfinfo template.pdf
 \hypersetup{
-  pdftitle={mapyde - an end-to-end pipeline workflow for particle physics},
+  pdftitle={\shorttitle},
   pdfsubject={q-bio.NC, q-bio.QM},
   pdfauthor={Giordon~Stark, Mike~Hance},
   pdfkeywords={First keyword, Second keyword, More},
@@ -115,7 +121,7 @@ Searches for new physics at the Large Hadron Collider have constrained many mode
 \item Paragraph describing this paper
 \end{itemize}
 
-\section{The \mapyde toolkit}
+\section{The \mapyde{} toolkit}
 \label{sec:mapyde}
 
 \begin{itemize}
@@ -144,7 +150,7 @@ We demonstrate the utility of the analysis chain described above by reproducing 
 
 We use \mapyde to generate, shower, and simulate SUSY events, to analyze them using \simpleanalysis, and to interpret the results using \pyhf.  The implementation corresponds to \mapyde{} version \textcolor{red}{xxx, need to update to latest version and confirm it still runs}, with configuration cards and scripts provided in a public github repository~\cite{mapyde-user} (\textcolor{red}{need to fix up that area if Giordon hasn't done it already}).  The configuration uses \madgraph{} version 2.9.3, \pythia{} version 8.306, and \delphes{} version 3.5.0.  The \simpleanalysis{} code runs on dedicated containers provided by ATLAS~\cite{SAGitLabRegistry}, where we use the ``\texttt{EwkCompressed2018}'' selection corresponding to the analyses from~\cite{ATLAS:2019lng}.  The \mapyde{} package includes resources to convert the \delphes{} ROOT output into inputs for \simpleanalysis{} (\texttt{delphes2SA}) and from \simpleanalysis{} ROOT file outputs to JSON format (\texttt{SA2JSON}) used as input for \pyhf.  We use \pyhf{} version \textcolor{red}{xxx (need to figure out what we're running in \texttt{pyplotting})} to patch the public likelihoods provided in the \hepdata~\cite{HepData} repository for Ref.~\cite{ATLAS:2019lng} with the signal yields from \mapyde, and to compute upper limits on the signal strength, \musig.  When reproducing the results for the same benchmark models from Ref.~\cite{ATLAS:2019lng} the \pyhf{} output is compared with limit contours provided in \hepdata.
 
-The signal samples produced in our \mapyde{} workflow differ from those used in Ref.~\cite{ATLAS:2019lng} in three significant ways.  First, events in the ATLAS samples contained either one or two jets in the matrix element in addition to a pair of SUSY particles, with the one- and $\geq$ two-jet processes merged in the parton shower using the CKKW-L algorithm.  In our setup, we produce only one-jet events in \madgraph, and allow \pythia{} to model the contributions from additional emissions.  Second, the ATLAS samples use \madspin{} to perform the three-body decays of the electroweakinos to SM leptons and a \chioz, while we perform decays using \pythia.  Third, and most importantly, the ATLAS samples use ATLAS simulation and reconstruction software to transform the \pythia{} output into ROOT files containing physics objects, while we use \delphes.
+The signal samples produced in our \mapyde{} workflow differ from those used in Ref.~\cite{ATLAS:2019lng} in three significant ways.  First, events in the ATLAS samples contained up to two jets in the matrix element in addition to a pair of SUSY particles, with different jet multuplicity processes merged in the parton shower using the CKKW-L algorithm.  In our setup, we produce only one-jet events in \madgraph, and allow \pythia{} to model the contributions from additional emissions.  Second, the ATLAS samples use \madspin{} to perform the three-body decays of the electroweakinos to SM leptons and a \chioz, while we perform decays using \pythia.  Third, and most importantly, the ATLAS samples use ATLAS simulation and reconstruction software to transform the \pythia{} output into ROOT files containing physics objects, while we use \delphes.
 
 The impact of the first two differences is evaluated by comparing the acceptance of the event selection applied to events at particle level.  ATLAS provides the acceptance of the event selection by processing particle-level events with \simpleanalysis{} as part of the public event record of the search.  We perform a similar calculation by passing the \hepmc{} event record from \pythia{} directly into \simpleanalysis{} using \mapyde.  The resulting signal region yields are then compared to the product of the ATLAS acceptance, cross section, branching ratio, and integrated luminosity.  On average we find that the \mapyde{} and ATLAS acceptances are very similar, except for very compressed points where on average the ATLAS acceptance is approximately 10\% higher.
 
@@ -188,25 +194,24 @@ This class of models, while being less ``simplified'' than the slepton-bino mode
 \subsection{Compressed Electroweakinos}
 \label{reinterp-ewkino}
 
-\begin{itemize}
-\item Reproducing ATLAS results
+The ATLAS search for compressed electroweakinos considered two different simplified models: one with ``pure'' Higgsino-like \chitz, \chiopm, and \chioz states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples uses the same k-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in Fig.~\ref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS.  
 
-  \begin{figure}
+\begin{figure}
   \centering
-  \includegraphics[width=0.8\textwidth]{{./figures/Higgsino}}         %% examples/mapyde/EWKino_contours.ipynb
-  \caption{Higgsino limits}
+  \includegraphics[width=0.5\textwidth]{{./figures/Higgsino}}         %% examples/mapyde/EWKino_contours.ipynb
+  \caption{Constraints on the ``pure Higgsino'' simplified model from ATLAS (blue dots) and \mapyde{} (blue solid).}
   \label{fig:Higgsino}
 \end{figure}
 
-\item Describing the higgsino-wino-bino model
-\item Results
-\end{itemize}
+We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to ``wino-bino-higgsino'' models that have potentially rich phenomenologies.  We use a pMSSM scanning tool (\pmssmfactory~\cite{pMSSMfactory}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from -500 GeV to 500 GeV, sampled with flat priors.  Particle masses are calculated using \spheno~\cite{Porod:2003um} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  From this sample we select 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation, simulation, and analysis in \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output, with a constant k-factor of 1.2 applied to all samples.
+
+The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in terms of the mass of the \chitz and the mass difference $\Delta m=m(\chitz)-m(\chioz)$, to facilitate comparisons with the pure-Higgsino constraints from ATLAS.  The models under study are binned in a course grid in the $\Delta m$ vs $m(\chitz)$ plane, and the fraction of excluded models is calculated within each bin.  The expected and observed constraints on these models are shown in Fig.~\ref{fig:EWKino_pmssm}, with the ATLAS Higgsino results overlaid for comparison.  In general the pMSSM points under study are more constrained than those of a pure-Higgsino model at larger mass splittings, likely due to the presence of the additional \chithz{} and its own decay to final states similar to that of the \chitz.  
 
 \begin{figure}
   \centering
   \includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_exp}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
   \includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_obs}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
-  \caption{Higgsino-Wino-Bino limits}
+  \caption{Expected (left) and observed (right) constraints on wino-bino-higgsino models containing three light neutralinos.  Black dots represent the specific model points used to calculate the fraction of excluded models within a bin, shown in color.  White bins contain no models from the current scan.  Results from an ATLAS search for pure Higgsinos are overlaid in blue dots.}
   \label{fig:EWKino_pmssm}
 \end{figure}
 
