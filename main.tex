@@ -109,17 +109,19 @@ Searches for new physics at the Large Hadron Collider have constrained many mode
 \section{Introduction}
 \label{sec:introduction}
 
-\begin{itemize}
-\item Describe the reinterpretation problem.
-\item Mention other toolkits:
-  \begin{itemize}
-  \item Full reinterpretation: RECAST
-  \item Simplified likelihoods: GAMBIT? CHECKMATE?
-  \item Others?
-  \end{itemize}
-\item Describe mapyde's approach
-\item Paragraph describing this paper
-\end{itemize}
+Reinterpretation problem in HEP, etc.
+
+% this is not the best, just starting somewhere.
+Existing toolkits solve the reinterpretation problem in various ways.  Some toolkits implement existing analysis workflows in independent software frameworks (e.g. \textsc{checkmate}~\cite{Dercks:2016npn}) or \textsc{MadAnalysis}~\cite{Araz:2020lnp}).  Others match simplified versions of full models to experimental results using efficiency maps (e.g. \texttt{SModelS}~\cite{Alguero:2021dig}).  The GAMBIT framework~\cite{GAMBIT:2017yxo} does...  The CMS collaboration provides Simplified Likelihoods~\cite{Collaboration:2242860}...  \textcolor{red}{Giordon, can you help with some details and any frameworks we've missed?}  The \textsc{recast} framework~\cite{Cranmer:2010hk} facilitates full production and processing of simulated events using the same software tools used by ATLAS in the physics results of interest.  This has the advantage of high accuracy and precision, but requires significant computational resources to produce fully simulated and reconstructed samples.  
+
+% this is not the best, just starting somewhere.
+Recent progress in releasing full public likelihoods has further expanded the possibilities for reinterpreting LHC analyses.  It is no longer a technical challenge to assess the sensitivity of an LHC analysis with a public serialized likelihood, including all uncertainties and correlations, to an arbitrary model of new physics.  The only challenge that remains is to evaluate the acceptance and efficiency of the analysis to the new model.
+
+% this is not the best, just starting somewhere.
+In this paper we present a new pipeline for calculating the sensitivity of existing analyses with public likelihoods to models of new physics.  The pipeline, called \mapyde, is composed of a chain of public tools stitched together and steered with a single configuration file.  The tools employed are....
+
+% needed?
+This paper is organized as follows.  The next section describes the \mapyde{} toolkit, including the software employed, the configuration, and deployment in containerized environments.  The following section describes several example use-cases for \mapyde: reproducing existing ATLAS results; testing a new simplified model of slepton-wino-bino production; and running a pMSSM-like scan of electroweak SUSY model parameters to test SUSY models with mixed wino-bino-higgsino states.  
 
 \section{The \mapyde{} toolkit}
 \label{sec:mapyde}
