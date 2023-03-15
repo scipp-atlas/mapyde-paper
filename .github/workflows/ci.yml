@@ -1,4 +1,4 @@
-name: Build LaTeX documents
+name: CI
 on:
   workflow_dispatch:
   pull_request:
