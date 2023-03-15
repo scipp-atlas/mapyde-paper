@@ -18,12 +18,13 @@ repos:
     - id: debug-statements
     - id: end-of-file-fixer
       # exclude generated files
-      exclude: ^validation/|\.dtd$|\.json$|\.xml$
+      exclude: ^validation/|\.dtd$|\.json$|\.xml|\.bib$
     - id: mixed-line-ending
     - id: name-tests-test
       args: ["--pytest-test-first"]
     - id: requirements-txt-fixer
     - id: trailing-whitespace
+      files: ".*\\.(?:tex|py)$"
       # exclude generated files
       exclude: ^validation/|\.dtd$|\.xml$
 
@@ -45,23 +46,6 @@ repos:
       - id: no-space-in-cite
       - id: tilde-cite
       - id: unique-labels
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-      - id: trailing-whitespace
-        files: ".*\\.(?:tex|py)$"
-      - id: end-of-file-fixer
-        exclude: \.bib$
-      - id: check-added-large-files
-      - id: check-case-conflict
-      - id: check-merge-conflict
-      - id: check-symlinks
-      - id: check-json
-      - id: check-yaml
-      - id: check-toml
-      - id: check-xml
-      - id: debug-statements
-      - id: mixed-line-ending
   - repo: https://github.com/katrielalex/biber-formatter
     rev: v1.1
     hooks:
