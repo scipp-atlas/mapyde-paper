@@ -46,6 +46,8 @@ repos:
       - id: no-space-in-cite
       - id: tilde-cite
       - id: unique-labels
+      - id: cleveref-instead-of-autoref
+      - id: cleveref-capitalization
   - repo: https://github.com/katrielalex/biber-formatter
     rev: v1.1
     hooks:
