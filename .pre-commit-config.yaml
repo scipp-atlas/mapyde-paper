@@ -32,7 +32,6 @@ repos:
     rev: v1.4.0
     hooks:
       - id: american-eg-ie
-      - id: cleveref-capitalization
       - id: consistent-spelling
         args:
             [
@@ -47,7 +46,6 @@ repos:
       - id: tilde-cite
       - id: unique-labels
       - id: cleveref-instead-of-autoref
-      - id: cleveref-capitalization
   - repo: https://github.com/katrielalex/biber-formatter
     rev: v1.1
     hooks:

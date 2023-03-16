@@ -5,6 +5,7 @@
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
 \usepackage{hyperref}       % hyperlinks
+\usepackage{cleveref}
 \usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
 \usepackage{amsfonts}       % blackboard math symbols
@@ -15,6 +16,19 @@
 \usepackage{doi}
 \usepackage{xcolor}
 \usepackage[english=american,autostyle=true,autopunct,csdisplay]{csquotes}
+
+\usepackage[cache=false,newfloat=true]{minted}
+\usepackage{float} % to use \begin{listing}[H]
+\usemintedstyle{friendly}
+\setminted[toml]{fontsize=\scriptsize, numbersep=5pt, frame=lines, framesep=2mm, gobble=0}
+\setminted[ini]{fontsize=\scriptsize, numbersep=5pt, frame=lines, framesep=2mm, gobble=0}
+%\setminted[json]{fontsize=\scriptsize, numbersep=5pt, frame=lines, framesep=2mm, gobble=0}
+%\setminted[python]{fontsize=\scriptsize, numbersep=5pt, frame=lines, framesep=2mm, gobble=0, linenos}
+\setminted{frame=single,framesep=10pt}
+%\BeforeBeginEnvironment{minted}{\vspace{-0.2cm}}
+%\AfterEndEnvironment{minted}{\vspace{-0.2cm}}
+\usepackage{caption}
+\captionsetup[listing]{skip=-4pt}
 
 \usepackage[backend=biber,sorting=none]{biblatex}
 \addbibresource{references.bib}
@@ -27,7 +41,7 @@
 \newcommand{\mapyde}{\texttt{mapyde}}
 \newcommand{\simpleanalysis}{\texttt{SimpleAnalysis}}
 \newcommand{\madgraph}{\textsc{MadGraph}}
-\newcommand{\madspin}{\textsc{MadSPin}}
+\newcommand{\madspin}{\textsc{MadSpin}}
 \newcommand{\pythia}{\textsc{Pythia}}
 \newcommand{\delphes}{\textsc{Delphes}}
 \newcommand{\pyhf}{\texttt{pyhf}}
@@ -35,7 +49,7 @@
 \newcommand{\hepdata}{\texttt{HEPData}}
 \newcommand{\hepmc}{\textsc{hepmc}}
 \newcommand{\pt}{\ensuremath{p_{\mathrm{T}}}}
-\newcommand{\pmssmfactory}{\texttt{pMSSMFactory}}
+\newcommand{\easyscanhep}{\texttt{EasyScan\_HEP}}
 \newcommand{\spheno}{\textsc{Spheno}}
 
 \newcommand{\thistitle}{Reduce, Reuse, Reinterpret: an end-to-end pipeline for recycling particle physics results}
@@ -99,7 +113,7 @@
 \maketitle
 
 \begin{abstract}
-Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized likelihoods, in a way that provides accurate limits even in models that differ meaningfully from the benchmark models of the original analysis .  These resources are combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \textsc{TOML} configuration files, and bundled into the \mapyde{} python package.  The use of \mapyde{} is demonstrated by constraining SUSY models with compressed sleptons and electroweakinos using ATLAS results.
+	Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized likelihoods, in a way that provides accurate limits even in models that differ meaningfully from the benchmark models of the original analysis .  These resources are combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \textsc{TOML} configuration files, and bundled into the \mapyde{} python package.  The use of \mapyde{} is demonstrated by constraining SUSY models with compressed sleptons and electroweakinos using ATLAS results.
 \end{abstract}
 
 
@@ -128,19 +142,19 @@ This paper is organized as follows.  The next section describes the \mapyde{} to
 \label{sec:the-toolkit}
 
 \begin{itemize}
-\item Tools:
-  \begin{itemize}
-  \item General tools: Madgraph, Pythia, Delphes
-  \item ATLAS tools: SA
-  \item Fits: pyhf
-  \end{itemize}
-\item Configuration: TOML files
-\item Runtime:
-  \begin{itemize}
-  \item Docker containers
-  \item Python steering
-  \end{itemize}
-\item Outputs
+	\item Tools:
+	      \begin{itemize}
+		      \item General tools: Madgraph, Pythia, Delphes
+		      \item ATLAS tools: SA
+		      \item Fits: pyhf
+	      \end{itemize}
+	\item Configuration: TOML files
+	\item Runtime:
+	      \begin{itemize}
+		      \item Docker containers
+		      \item Python steering
+	      \end{itemize}
+	\item Outputs
 \end{itemize}
 
 \section{Reinterpreting Compressed SUSY Searches from ATLAS}
@@ -164,32 +178,32 @@ The final difference, between the ATLAS simulation framework and \mapyde, is eva
 
 We first reproduce the results of the ATLAS search for compressed sleptons.  The ATLAS search is optimized using a slepton-bino model, where the slepton NLSP decays to a bino-like LSP and a charged SM lepton.  We compare the leading-order (LO) cross sections calculated by \madgraph{} in an inclusive sample (without additional emissions) with the next-to-leading-order (NLO) cross sections reported by ATLAS and find a NLO:LO k-factor of 1.18, which is used to scale the one-jet \madgraph{} samples produced with \mapyde.
 
-After the acceptance corrections described above, the lepton efficiencies in \delphes{} are tuned to reproduce the ATLAS signal yields.  The efficiencies of electrons and muons after object selection are provided as part of the public record for Ref.~\cite{ATLAS:2019lng} and are the starting point for the modified \delphes{} configuration used to reproduce the ATLAS results.  We find that setting all electron and muon efficiencies in \delphes{} to the upper range of values reported in Fig. 3 of~\cite{ATLAS:2019lng} is sufficient to reproduce the results of the ATLAS slepton and electroweakino searches to adequate precision, as shown in Figs.~\ref{fig:SleptonBino} and \ref{fig:Higgsino} below.  The only exception is the lowest \pt{} bin for both electrons and muons, where the \mapyde{} efficiencies needed to reproduce the ATLAS limits are roughly 15\% higher than the values reported by ATLAS.  Figure~\ref{fig:SleptonBino} also shows the model constraints for the slepton-bino search when using the default \delphes{} configuration card, which does a reasonable job of describing the high-splitting regions, but fails to describe the most compressed mass points, which are most sensitive to the low-\pt{} lepton efficiencies provided by ATLAS.
+After the acceptance corrections described above, the lepton efficiencies in \delphes{} are tuned to reproduce the ATLAS signal yields.  The efficiencies of electrons and muons after object selection are provided as part of the public record for Ref.~\cite{ATLAS:2019lng} and are the starting point for the modified \delphes{} configuration used to reproduce the ATLAS results.  We find that setting all electron and muon efficiencies in \delphes{} to the upper range of values reported in Fig. 3 of~\cite{ATLAS:2019lng} is sufficient to reproduce the results of the ATLAS slepton and electroweakino searches to adequate precision, as shown in~\Cref{fig:SleptonBino,fig:Higgsino} below.  The only exception is the lowest \pt{} bin for both electrons and muons, where the \mapyde{} efficiencies needed to reproduce the ATLAS limits are roughly 15\% higher than the values reported by ATLAS. \Cref{fig:SleptonBino} also shows the model constraints for the slepton-bino search when using the default \delphes{} configuration card, which does a reasonable job of describing the high-splitting regions, but fails to describe the most compressed mass points, which are most sensitive to the low-\pt{} lepton efficiencies provided by ATLAS.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=0.5\textwidth]{{./figures/SleptonBino}}         %% examples/mapyde/SleptonBino_contours.ipynb
-  \caption{Constraints on the slepton-bino model from the ATLAS paper~\cite{ATLAS:2019lng} (blue dots), from \mapyde{} before tuning the \delphes{} lepton efficiencies (orange solid), and from \mapyde{} after tuning (blue solid).}
-  \label{fig:SleptonBino}
+	\centering
+	\includegraphics[width=0.5\textwidth]{{./figures/SleptonBino}}         %% examples/mapyde/SleptonBino_contours.ipynb
+	\caption{Constraints on the slepton-bino model from the ATLAS paper~\cite{ATLAS:2019lng} (blue dots), from \mapyde{} before tuning the \delphes{} lepton efficiencies (orange solid), and from \mapyde{} after tuning (blue solid).}
+	\label{fig:SleptonBino}
 \end{figure}
 
-With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays with 100\% branching ratio to a wino-like \chitz{} NLSP and a SM charged lepton, with the \chitz decaying to a \chioz and two soft fermions, as illustrated in Fig.~\ref{fig:feynman:slepton_wino_bino}.  The \pt{} of the SM lepton will be largely determined by the slepton-\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the slepton-\chioz{} splitting.
+With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays with 100\% branching ratio to a wino-like \chitz{} NLSP and a SM charged lepton, with the \chitz decaying to a \chioz and two soft fermions, as illustrated in~\Cref{fig:feynman:slepton_wino_bino}.  The \pt{} of the SM lepton will be largely determined by the slepton-\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the slepton-\chioz{} splitting.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=0.5\textwidth]{{./figures/feynman/output/slepton_wino_bino}}
-  \caption{Feynman diagram of slepton pair production, with slepton decays to wino-like NLSP's, which then decay to bino-like LSP's.}
-  \label{fig:feynman:slepton_wino_bino}
+	\centering
+	\includegraphics[width=0.5\textwidth]{{./figures/feynman/output/slepton_wino_bino}}
+	\caption{Feynman diagram of slepton pair production, with slepton decays to wino-like NLSP's, which then decay to bino-like LSP's.}
+	\label{fig:feynman:slepton_wino_bino}
 \end{figure}
 
-We parameterize the model in terms of the slepton mass, the slepton-\chioz{} mass gap, and the \chitz-\chioz mass gap, to allow us to display the model constraints in the same plane as the slepton-bino results from ATLAS.  The resulting constraints (both expected and observed) are shown in Fig.~\ref{fig:SleptonWinoBino} for a range of \chitz-\chioz{} splittings.  At small splittings the results resemble those of the slepton-bino model, since the \chitz{} is nearly degenerate with the \chioz{} leading to virtually no kinematic difference arising from the secondary decay of the \chitz.  By contrast, for large \chitz-\chioz{} splittings, given the requirement that the slepton must decay through a \chitz, the constrained parameter space is only at larger slepton-\chioz splittings, and covers a smaller range in slepton masses due to small slepton-\chitz{} splitting leading to softer SM leptons and lower lepton efficiencies.
+We parameterize the model in terms of the slepton mass, the slepton-\chioz{} mass gap, and the \chitz-\chioz mass gap, to allow us to display the model constraints in the same plane as the slepton-bino results from ATLAS.  The resulting constraints (both expected and observed) are shown in~\Cref{fig:SleptonWinoBino} for a range of \chitz-\chioz{} splittings.  At small splittings the results resemble those of the slepton-bino model, since the \chitz{} is nearly degenerate with the \chioz{} leading to virtually no kinematic difference arising from the secondary decay of the \chitz.  By contrast, for large \chitz-\chioz{} splittings, given the requirement that the slepton must decay through a \chitz, the constrained parameter space is only at larger slepton-\chioz splittings, and covers a smaller range in slepton masses due to small slepton-\chitz{} splitting leading to softer SM leptons and lower lepton efficiencies.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
-  \includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
-  \caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
-  \label{fig:SleptonWinoBino}
+	\centering
+	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
+	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
+	\caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
+	\label{fig:SleptonWinoBino}
 \end{figure}
 
 This class of models, while being less \enquote{simplified} than the slepton-bino model traditionally studied by LHC experiments, includes models that nominally escape constraint by both existing slepton-bino searches as well as direct searches for electroweakinos.  In particular, the wino-bino constraints reported in Ref.~\cite{ATLAS:2019lng} constrain electroweakinos with \chitz-\chioz{} splittings as low as 1 GeV only for electroweakino masses near 100 GeV, while in the slepton-wino-bino model we can exclude models with 1 GeV \chitz-\chioz{} splittings up to \chioz{} masses of over 200 GeV.
@@ -197,25 +211,25 @@ This class of models, while being less \enquote{simplified} than the slepton-bin
 \subsection{Compressed Electroweakinos}
 \label{ssec:compressed-electroweakinos}
 
-The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples uses the same k-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in Fig.~\ref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS.
+The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples uses the same k-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in~\Cref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=0.5\textwidth]{{./figures/Higgsino}}         %% examples/mapyde/EWKino_contours.ipynb
-  \caption{Constraints on the \enquote{pure Higgsino} simplified model from ATLAS (blue dots) and \mapyde{} (blue solid).}
-  \label{fig:Higgsino}
+	\centering
+	\includegraphics[width=0.5\textwidth]{{./figures/Higgsino}}         %% examples/mapyde/EWKino_contours.ipynb
+	\caption{Constraints on the \enquote{pure Higgsino} simplified model from ATLAS (blue dots) and \mapyde{} (blue solid).}
+	\label{fig:Higgsino}
 \end{figure}
 
-We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to \enquote{wino-bino-higgsino} models that have potentially rich phenomenologies.  We use a pMSSM scanning tool (\pmssmfactory~\cite{pMSSMfactory}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from -500 GeV to 500 GeV, sampled with flat priors.  Particle masses are calculated using \spheno~\cite{Porod:2003um} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  From this sample we select 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation, simulation, and analysis in \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output, with a constant k-factor of 1.2 applied to all samples.
+We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to \enquote{wino-bino-higgsino} models that have potentially rich phenomenologies.  We use a pMSSM scanning tool (\easyscanhep~\cite{easyscanhep,Han:2016gvr}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from -500 GeV to 500 GeV, sampled with flat priors, defined in~\Cref{lst:easyscanini}.  Particle masses are calculated using \spheno~\cite{Porod:2003um} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  From this sample we select 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation, simulation, and analysis in \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output, with a constant k-factor of 1.2 applied to all samples.
 
-The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in terms of the mass of the \chitz and the mass difference $\Delta m=m(\chitz)-m(\chioz)$, to facilitate comparisons with the pure-Higgsino constraints from ATLAS.  The models under study are binned in a course grid in the $\Delta m$ vs $m(\chitz)$ plane, and the fraction of excluded models is calculated within each bin.  The expected and observed constraints on these models are shown in Fig.~\ref{fig:EWKino_pmssm}, with the ATLAS Higgsino results overlaid for comparison.  In general the pMSSM points under study are more constrained than those of a pure-Higgsino model at larger mass splittings, likely due to the presence of the additional \chithz{} and its own decay to final states similar to that of the \chitz.
+The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in terms of the mass of the \chitz and the mass difference $\Delta m=m(\chitz)-m(\chioz)$, to facilitate comparisons with the pure-Higgsino constraints from ATLAS.  The models under study are binned in a course grid in the $\Delta m$ vs $m(\chitz)$ plane, and the fraction of excluded models is calculated within each bin.  The expected and observed constraints on these models are shown in~\Cref{fig:EWKino_pmssm}, with the ATLAS Higgsino results overlaid for comparison.  In general the pMSSM points under study are more constrained than those of a pure-Higgsino model at larger mass splittings, likely due to the presence of the additional \chithz{} and its own decay to final states similar to that of the \chitz.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_exp}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
-  \includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_obs}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
-  \caption{Expected (left) and observed (right) constraints on wino-bino-higgsino models containing three light neutralinos.  Black dots represent the specific model points used to calculate the fraction of excluded models within a bin, shown in color.  White bins contain no models from the current scan.  Results from an ATLAS search for pure Higgsinos are overlaid in blue dots.}
-  \label{fig:EWKino_pmssm}
+	\centering
+	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_exp}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
+	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_obs}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
+	\caption{Expected (left) and observed (right) constraints on wino-bino-higgsino models containing three light neutralinos.  Black dots represent the specific model points used to calculate the fraction of excluded models within a bin, shown in color.  White bins contain no models from the current scan.  Results from an ATLAS search for pure Higgsinos are overlaid in blue dots.}
+	\label{fig:EWKino_pmssm}
 \end{figure}
 
 \section{Conclusion}
@@ -224,5 +238,39 @@ The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in 
 We have presented \texttt{mapyde}, shown some reinterpretations, and we're done.
 
 \printbibliography
+
+\appendix
+
+\section{EasyScan Configuration}
+\label{sec:easyscan-configuration}
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
+[scan]
+Scan method:       random
+#                  ID     Prior  Min    MAX
+Input parametes:   tanb,  Flat,  1,     60
+                   M_1,   Flat,  2000,  2000
+                   M_2,   Flat,  -500,  500
+                   M_3,   Flat,  2000,  2000
+                   AT,    Flat,  2000,  2000
+                   Ab,    Flat,  2000,  2000
+                   Atau,  Flat,  2000,  2000
+                   MU,    Flat,  -500,  500
+                   mA,    Flat,  2000,  2000
+                   meL,   Flat,  2000,  2000
+                   mtauL, Flat,  2000,  2000
+                   meR,   Flat,  2000,  2000
+                   mtauR, Flat,  2000,  2000
+                   mqL1,  Flat,  2000,  2000
+                   mqL3,  Flat,  2000,  2000
+                   muR,   Flat,  2000,  2000
+                   mtR,   Flat,  2000,  2000
+                   mdR,   Flat,  2000,  2000
+                   mbR,   Flat,  2000,  2000
+  \end{minted}
+	\caption{A portion of the \texttt{easyscan.ini} configuration defining the random sampling for the electroweakinos scan.}
+	\label{lst:easyscanini}
+\end{listing}
 
 \end{document}
