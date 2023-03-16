@@ -247,6 +247,7 @@ TSWLatexianTemp*
 # WinEdt
 *.bak
 *.sav
+*.bak0
 
 # Texpad
 .texpadtmp
