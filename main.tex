@@ -30,7 +30,7 @@
 \usepackage{caption}
 \captionsetup[listing]{skip=-4pt}
 
-\usepackage[backend=biber,sorting=none]{biblatex}
+\usepackage[backend=biber,sorting=none,citestyle=numeric-comp]{biblatex}
 \addbibresource{references.bib}
 
 \newcommand{\chioz}{\ensuremath{\widetilde{\chi}_{1}^{0}}}
@@ -49,8 +49,12 @@
 \newcommand{\hepdata}{\texttt{HEPData}}
 \newcommand{\hepmc}{\textsc{hepmc}}
 \newcommand{\pt}{\ensuremath{p_{\mathrm{T}}}}
-\newcommand{\easyscanhep}{\texttt{EasyScan\_HEP}}
+\newcommand{\easyscanhep}{\textsc{EasyScan\_HEP}}
 \newcommand{\spheno}{\textsc{Spheno}}
+\newcommand{\feynhiggs}{\textsc{FeynHiggs}}
+\newcommand{\micromegas}{\textsc{MicrOMEGAS}}
+\newcommand{\superiso}{\textsc{SuperIso}}
+\newcommand{\gmtwocalc}{\textsc{GM2Calc}}
 
 \newcommand{\thistitle}{Reduce, Reuse, Reinterpret: an end-to-end pipeline for recycling particle physics results}
 
@@ -241,8 +245,19 @@ We have presented \texttt{mapyde}, shown some reinterpretations, and we're done.
 
 \appendix
 
-\section{EasyScan Configuration}
-\label{sec:easyscan-configuration}
+\section{EasyScan\_HEP Configuration}
+\label{sec:easyscan-hep-configuration}
+
+We used an \easyscanhep \texttt{ini} configuration file that defined the scan ranges in~\Cref{lst:easyscanini} as well as additional programs to run, described in the text above. The specific versions used are:
+
+\begin{itemize}
+	\item \easyscanhep{} (\texttt{v1.0.0}): pMSSM scanning and program control~\cite{easyscanhep,Han:2016gvr}
+	\item \spheno{} (\texttt{v4.0.4}): spectrum generator~\cite{Porod:2003um}
+	\item \feynhiggs{} (\texttt{v2.16.0}): Higgs mass calculation~\cite{Bahl:2018qog,Bahl:2017aev,Bahl:2016brp,Hahn:2013ria,Frank:2006yh,Degrassi:2002fi,Heinemeyer:1998np,Heinemeyer:1998yj}
+	\item \micromegas{} (\texttt{v5.2.1}): Dark Matter calculations (e.g., relic density)~\cite{Belanger:2020gnr}
+	\item \superiso{} (\texttt{v4.0}): Flavor Physics observables~\cite{Arbey:2018msw}
+	\item \gmtwocalc{} (\texttt{v2.0.0}): $g-2$ calculation~\cite{Athron:2015rva,Athron:2021evk}
+\end{itemize}
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{ini}
@@ -272,5 +287,6 @@ Input parametes:   tanb,  Flat,  1,     60
 	\caption{A portion of the \texttt{easyscan.ini} configuration defining the random sampling for the electroweakinos scan.}
 	\label{lst:easyscanini}
 \end{listing}
+
 
 \end{document}
