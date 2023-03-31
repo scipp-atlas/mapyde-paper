@@ -1,0 +1,27 @@
+\input{header.tex}
+% KEEP SIZE LOW SO THE LETTERS ARE LARGE
+\begin{fmfgraph*}(100,75)
+
+
+	\fmf{plain}{in,o1}
+	\fmf{ewkino,lab=\color{red}$\ninotwo$,lab.side=left,fore=red}{in,v2}
+
+	\fmflabel{$\ell^\pm$}{o1}
+	\fmflabel{\color{red}$\slepton^\pm$}{in}
+
+	\fmf{ewkino,fore=red}{v2,o4}
+	\fmf{plain}{v2,o2}
+	\fmf{plain}{v2,o3}
+
+	\fmflabel{\color{red}$\ninoone$}{o4}
+	\fmflabel{$f$}{o2}
+	\fmflabel{$f$}{o3}
+
+	\fmfleft{in}
+	\fmfright{o1,o2,o3,o4}
+
+	\fmfforce{(0.35w,0.8h)}{v2}
+
+
+\end{fmfgraph*}
+\input{footer.tex}
