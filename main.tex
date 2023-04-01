@@ -38,6 +38,7 @@
 
 \newcommand{\chioz}{\ensuremath{\widetilde{\chi}_{1}^{0}}}
 \newcommand{\chiopm}{\ensuremath{\widetilde{\chi}_{1}^{\pm}}}
+\newcommand{\chitpm}{\ensuremath{\widetilde{\chi}_{2}^{\pm}}}
 \newcommand{\chitz}{\ensuremath{\widetilde{\chi}_{2}^{0}}}
 \newcommand{\chithz}{\ensuremath{\widetilde{\chi}_{3}^{0}}}
 \newcommand{\slepton}{\ensuremath{\widetilde{\ell}}}
@@ -208,7 +209,7 @@ This class of models, while being less \enquote{simplified} than the slepton-bin
 \subsection{Compressed Electroweakinos}
 \label{ssec:compressed-electroweakinos}
 
-The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples uses the same $k$-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in~\Cref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS.
+The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz{} states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples uses the same $k$-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in~\Cref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS.
 
 \begin{figure}
 	\centering
@@ -217,7 +218,15 @@ The ATLAS search for compressed electroweakinos considered two different simplif
 	\label{fig:Higgsino}
 \end{figure}
 
-We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to \enquote{wino-bino-higgsino} models that have potentially rich phenomenologies.  We use a pMSSM scanning tool (\easyscanhep~\cite{easyscanhep,Han:2016gvr}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from -500 GeV to 500 GeV, sampled with flat priors, defined in~\Cref{lst:easyscanini}.  Particle masses are calculated using \spheno~\cite{Porod:2003um,Porod:2011nf} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  Additional tools are run as described in~\Cref{sec:easyscan-hep-configuration}.  From this sample we select (\Cref{lst:mask}) 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation, simulation, and analysis in \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output, with a constant $k$-factor of 1.2 applied to all samples.
+\begin{figure}
+	\centering
+	\subfloat[one-step]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/ewkino_onestep}}}\hspace{2cm}
+	\subfloat[two-step]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/ewkino_twostep}}}
+	\caption{Example feynman diagrams of possible electroweakino decays with (a) $\chitpm\to\chioz$ and (b) $\chitpm\to\chitz$. Note: in both cases above, the $W$-boson comes from $\chitpm$.}
+	\label{fig:feynman:ewkinos}
+\end{figure}
+
+We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to \enquote{wino-bino-higgsino} models that have potentially rich phenomenologies. Some example models we are exploring the sensitivity to are illustrated in~\Cref{fig:feynman:ewkinos}. We use a pMSSM scanning tool (\easyscanhep~\cite{easyscanhep,Han:2016gvr}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from -500 GeV to 500 GeV, sampled with flat priors, defined in~\Cref{lst:easyscanini}.  Particle masses are calculated using \spheno~\cite{Porod:2003um,Porod:2011nf} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  Additional tools are run as described in~\Cref{sec:easyscan-hep-configuration}.  From this sample we select (\Cref{lst:mask}) 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation, simulation, and analysis in \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output, with a constant $k$-factor of 1.2 applied to all samples.
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{python}
