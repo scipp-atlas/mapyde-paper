@@ -3,6 +3,7 @@
 # To compile
 
 ```
+$ make -C ./figures/
 $ latexmk -pdf main.tex
 ```
 

@@ -33,6 +33,9 @@
 
 \usepackage{subcaption}
 
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,shapes.geometric,backgrounds,fit,shadows.blur,arrows.meta}
+
 \usepackage[backend=biber,sorting=none,citestyle=numeric-comp]{biblatex}
 \addbibresource{references.bib}
 
@@ -103,7 +106,7 @@
 \maketitle
 
 \begin{abstract}
-	Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized probability models, in a way that provides accurate limits even in models that differ meaningfully from the benchmark models of the original analysis .  These resources are combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \textsc{TOML} configuration files, and bundled into the \mapyde{} python package.  The use of \mapyde{} is demonstrated by constraining SUSY models with compressed sleptons and electroweakinos using ATLAS results.
+	Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized probability models, in a way that provides accurate limits even in models that differ meaningfully from the benchmark models of the original analysis .  These resources are combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \textsc{TOML} configuration files, and bundled into the \mapyde{}~\cite{mapyde} python package.  The use of \mapyde{} is demonstrated by constraining SUSY models with compressed sleptons and electroweakinos using ATLAS results.
 \end{abstract}
 
 
@@ -122,14 +125,34 @@ Existing toolkits solve the reinterpretation problem in various ways as describe
 % this is not the best, just starting somewhere.
 Recent progress in releasing full public probability models has further expanded the possibilities for reinterpreting LHC analyses.  It is no longer a technical challenge to assess the sensitivity of an LHC analysis with a public serialized probability model, including all uncertainties and correlations, to an arbitrary model of new physics.  The only challenge that remains is to evaluate the acceptance and efficiency of the analysis to the new model.
 
-% this is not the best, just starting somewhere.
-In this paper we present a new pipeline for calculating the sensitivity of existing analyses with public probability models to models of new physics.  The pipeline, called \mapyde, is composed of a chain of public tools stitched together and steered with a single configuration file.  The primary tools employed are \madgraph~\cite{Alwall:2014hca,Frederix:2018nkq}, \pythia~\cite{Bierlich:2022pfr}, and \delphes~\cite{deFavereau:2013fsa,Selvaggi:2014mya,Mertens:2015kba} -- hence the moniker \textsc{MaPyDe} for the python package \mapyde. In addition, there is support for \simpleanalysis~\cite{simpleanalysis,atlas_simpleanalysis} and \pyhf~\cite{pyhf,pyhf_joss} in the pipeline. Additional tools, such as those described above, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and more natively supported in future versions of \mapyde upon request or by pull requests from external contributors.
-
 % needed?
 This paper is organized as follows. \Cref{sec:the-toolkit} describes the \mapyde{} toolkit, including the software employed, the configuration, and deployment in containerized environments.  \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas} describes several example use-cases for \mapyde: reproducing existing ATLAS results; testing a new simplified model of slepton-wino-bino production; and running a pMSSM-like scan of electroweak SUSY model parameters to test SUSY models with mixed wino-bino-higgsino states.
 
 \section{The \mapyde{} toolkit}
 \label{sec:the-toolkit}
+
+% TODO: add citation for v0.5.0 of mapyde
+In this paper we present a new pipeline for calculating the sensitivity of existing analyses with public probability models to models of new physics. This pipeline is built using \mapyde{}, a pure-python package with the primary goal of chaining the input/output of different public tools in HEP with a single configuration file. \mapyde{} additionally provides a user-friendly interface to configure, run, and extend the toolchain with other tools as needed. This paper focuses on version \texttt{v0.5.0} of \mapyde{} which comes out of the box with the ability to run:
+
+\begin{itemize}
+	\item \madgraph~\cite{Alwall:2014hca,Frederix:2018nkq} (event generation)
+	\item \pythia~\cite{Bierlich:2022pfr} (particle showering)
+	\item \delphes~\cite{deFavereau:2013fsa,Selvaggi:2014mya,Mertens:2015kba} (detector simulation)
+	\item \simpleanalysis~\cite{simpleanalysis,atlas_simpleanalysis} (provided by ATLAS)
+	\item \pyhf~\cite{pyhf,pyhf_joss} (provided by SciKit-HEP)
+\end{itemize}
+
+\mapyde{} was named after the primary three tools included: \madgraph, \pythia, and \delphes{} (\textsc{MaPyDe}). Additional tools, such as those described above, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and more natively supported in future versions of \mapyde upon request or by pull requests from external contributors.
+
+\subsection{Code Structure}
+\label{ssec:code-structure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\columnwidth]{figures/tikz/output/overview}
+	\caption{Overview of the \mapyde{} toolchain and the role of each component.}
+	\label{fig:mapydeoverview}
+\end{figure}
 
 \begin{itemize}
 	\item Tools:
@@ -253,7 +276,7 @@ The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in 
 \section{Conclusion}
 \label{sec:conclusion}
 
-We have presented \texttt{mapyde}, shown some reinterpretations, and we're done.
+We have presented \mapyde{}, shown some reinterpretations, and we're done.
 
 \printbibliography
 
