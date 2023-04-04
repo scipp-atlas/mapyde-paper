@@ -247,6 +247,7 @@ TSWLatexianTemp*
 # WinEdt
 *.bak
 *.sav
+*.bak*
 
 # Texpad
 .texpadtmp
@@ -293,5 +294,6 @@ deploy/main.html
 deploy/main.js
 deploy/LaTeXML.cache
 
-# feynman figures
+# dynamically generated figures
 figures/feynman/output/*.pdf
+figures/tikz/output/*.pdf

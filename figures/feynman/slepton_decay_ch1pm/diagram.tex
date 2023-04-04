@@ -1,0 +1,29 @@
+\input{header.tex}
+% KEEP SIZE LOW SO THE LETTERS ARE LARGE
+\begin{fmfgraph*}(100,75)
+
+
+	\fmf{plain}{in,o1}
+	\fmf{ewkino,lab=\color{red}$\chinoonepm$,lab.side=left,fore=red}{in,v2}
+
+	\fmflabel{$\nu$}{o1}
+	\fmflabel{\color{red}\slepton}{in}
+
+	\fmf{ewkino,fore=red}{v2,o4}
+	\fmf{boson,lab=$W^\pm$,lab.side=right}{v2,v3}
+
+	\fmflabel{\color{red}$\ninoone$}{o4}
+
+	\fmf{plain}{v3,o2}
+	\fmf{plain}{v3,o3}
+
+	\fmflabel{$\nu$}{o2}
+	\fmflabel{$\ell^\pm$}{o3}
+
+	\fmfleft{in}
+	\fmfright{o1,o2,o3,o4}
+
+	\fmfforce{(0.33w,0.75h)}{v2}
+
+\end{fmfgraph*}
+\input{footer.tex}
