@@ -12,14 +12,13 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
-\usepackage{lipsum}		% Can be removed after putting your text content
 \usepackage{graphicx}
 \usepackage{doi}
 \usepackage{xcolor}
 \usepackage[english=american,autostyle=true,autopunct,csdisplay]{csquotes}
 
 \usepackage[cache=false,newfloat=true]{minted}
-\usepackage{float} % to use \begin{listing}[H]
+\usepackage{float}          % to use \begin{listing}[H]
 \usemintedstyle{friendly}
 \setminted[toml]{numbersep=5pt, frame=lines, framesep=2mm, gobble=0}
 \setminted[ini]{numbersep=5pt, frame=lines, framesep=2mm, gobble=0}
@@ -75,12 +74,10 @@
 
 \title{Reduce, Reuse, Reinterpret: an end-to-end pipeline for recycling particle physics results}
 
-%\date{September 9, 1985}	% Here you can change the date presented in the paper title
-%\date{} 					% Or removing it
 % notice that we need ' \,' to add enough space to make sure email footnote works
 \author[ \,,1]{\orcidaffil{0000-0001-6616-3433}Giordon~Stark\thanks{\texttt{gistark@ucsc.edu}}}
+\author[12]{Camila Aristimuno Ots}
 \author[ \,,1]{\orcidaffil{0000-0001-8392-0934}Mike~Hance\thanks{\texttt{mhance@ucsc.edu}}}
-\author[ \,,12]{Camila Aristimuno Ots\thanks{\texttt{caristim@ucsc.edu}}}
 %\author[1]{\href{https://orcid.org/0000-0001-6616-3433}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Giordon~Stark}\thanks{\texttt{gistark@ucsc.edu}}}
 %\author[2]{\href{https://orcid.org/0000-0001-8392-0934}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Mike~Hance}\thanks{\texttt{mhance@ucsc.edu}}}
 \affil[1]{University of California, Santa Cruz\\ Santa Cruz Institute for Particle Physics\\1156 High Street\\Santa Cruz, CA 95064}
@@ -88,35 +85,24 @@
 %\affil[b]{Natural Sciences 2, Room \#317}
 \affil[2]{University of Southern California\\ Liquid Propulsion Laboratory\\ 854 Downey Way, Los Angeles, CA 90089}
 
-% Uncomment to remove the date
-%\date{}
-
 % Uncomment to override  the `A preprint' in the header
 %\renewcommand{\headeright}{Technical Report}
 %\renewcommand{\undertitle}{Technical Report}
-\renewcommand{\shorttitle}{\thistitle} %\mapyde{} - an end-to-end pipeline workflow for particle physics}
+\renewcommand{\shorttitle}{\thistitle}
 
-%%% TODO
-%%% Add PDF metadata to help others organize their library
-%%% Once the PDF is generated, you can check the metadata with
-%%% $ pdfinfo template.pdf
 \hypersetup{
   pdftitle={\shorttitle},
   pdfsubject={q-bio.NC, q-bio.QM},
-  pdfauthor={Giordon~Stark, Mike~Hance},
-  pdfkeywords={First keyword, Second keyword, More},
+  pdfauthor={Giordon~Stark, Camila Aristimuno Ots, Mike~Hance},
+  pdfkeywords={HEP, Reinterpretation, SUSY},
 }
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-	Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized probability models, in a way that provides accurate constraints even for models that differ meaningfully from the benchmark models of the original analysis.  The public analysis information is combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \toml{} configuration files, and bundled into the \mapyde{}~\cite{mapyde} python package.  The use of \mapyde{} is demonstrated by constraining SUSY models with compressed sleptons and electroweakinos using ATLAS results.
+	Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized probability models, in a way that provides accurate constraints even for models that differ meaningfully from the benchmark models of the original analysis.  The public analysis information is combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \toml{} configuration files, and bundled into the \mapyde{}~\cite{mapyde} python package.  The use of \mapyde{} is demonstrated by constraining previously untested SUSY models with compressed sleptons and electroweakinos using ATLAS results.
 \end{abstract}
-
-
-%% %% keywords can be removed
-%% \keywords{First keyword \and Second keyword \and More}
 
 
 \section{Introduction}
@@ -124,10 +110,8 @@
 
 Direct searches for new phenomena at the Large Hadron Collider (LHC) have constrained many models of beyond-the-Standard-Model (BSM) physics.  A typical LHC search will focus on an experimental signature chosen for its ability to discriminate between SM and BSM sources, and benchmark the results of the search using one or more specific models.  In some cases the chosen benchmarks are representative models that solve a particular problem, while in other cases the benchmark models are simplified models~\cite{LHCNewPhysicsWorkingGroup:2011mji} that represent a broader (but still limited) parameter space within a theoretical framework such as supersymmetry (SUSY).  In either case, the experimental results as published by LHC collaborations are only strictly applicable to the benchmark models, leaving the vast majority of BSM parameter space unexplored.  Leveraging the full power of LHC data in the search for new physics requires tools that facilitate the re-use of those experimental results to test models that were not considered in the original search.  The challenge to experiments is to publish or provide enough information to enable such efforts, and the challenge to the rest of the community is to use that information to extend our understanding of what BSM theories are still viable.  These challenges form the reinterpretation problem.
 
-% this is not the best, just starting somewhere.
 Existing toolkits solve the reinterpretation problem in various ways, as described in Section III of Ref.~\cite{LHCReinterpretationForum:2020xtr} and in Refs.~\cite{Cranmer:2021urp,Bailey:2022tdz}.  Some toolkits implement existing analysis workflows in independent software frameworks which are more simulation-based: \textsc{checkmate}~\cite{Dercks:2016npn}, \textsc{MadAnalysis5}~\cite{Conte:2018vmg,Araz:2020lnp,Dumont:2014tja}, \textsc{GAMBIT}'s \textsc{ColliderBit}~\cite{GAMBIT:2017yxo,Kvellestad:2019vxm,GAMBIT:2018gjo,zenodo:gambit}, \textsc{rivet}~\cite{Bierlich:2019rhm,Bierlich:2020wms}, and Contur~\cite{Buckley:2021neu} (which interprets \textsc{rivet} outputs).  Others match simplified versions of full models to experimental results using efficiency maps, relying more on experimental data: \texttt{SModelS}~\cite{Alguero:2021dig} and \recast-based approaches~\cite{Cranmer:2010hk} such as in Refs.~\cite{zenodo:LHCreinterpretation,llpRepo,RECAST1,RECAST2,RECAST3}.  The CMS collaboration provides Simplified Likelihood~\cite{CMS-NOTE-2017-001} correlation/covariance matrices, while the ATLAS collaboration provides full probability models~\cite{ATL-PHYS-PUB-2019-029} from which additional data is encoded, such as correlations and background estimates. The \recast{} framework~\cite{Cranmer:2010hk} facilitates full production and processing of simulated events using the same software tools used by ATLAS in the physics results of interest.  This has the advantage of high accuracy and precision, but requires significant computational resources to produce fully simulated and reconstructed samples.
 
-% this is not the best, just starting somewhere.
 Recent progress in releasing full public probability models has further expanded the possibilities for reinterpreting LHC analyses.  It is no longer a technical challenge to assess the sensitivity of an LHC analysis with a public serialized probability model, including all uncertainties and correlations, to an arbitrary model of new physics.  The only challenge that remains is to evaluate the acceptance and efficiency of the analysis to the new model.  This can be done using public event generation and detector simulation tools, informed by the experimental details of the reference analysis.
 
 In this paper we present a new pipeline for calculating the constraints on new physics from existing analyses with public probability models. This pipeline is built using \mapyde, a pure-python package that chains public tools in HEP with a single configuration file. Additionally, \mapyde{} provides a user-friendly interface to configure, run, and extend the toolchain with other tools as needed.  The \mapyde{} toolkit is described in \Cref{sec:the-toolkit}, including the software employed, the configuration, and deployment in containerized environments.  Two example uses of the \mapyde{} toolkit are provided in \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas}, which in which we reproduce existing ATLAS results, test a new simplified model of slepton-wino-bino production, and run a pMSSM-like scan of electroweak SUSY model parameters to test SUSY models with mixed wino-bino-higgsino states.
@@ -146,7 +130,7 @@ This paper describes the implementation of, and results obtained with, version \
 	\item \pyhf~\cite{pyhf,pyhf_joss} (probability model fitting)
 \end{itemize}
 
-and was named after the first three tools in a typical \mapyde{} simulation pipeline: \madgraph, \pythia, and \delphes{} (\textsc{MaPyDe}).  Additional tools, such as tools listed in \Cref{sec:introduction}, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and more natively supported in future versions of \mapyde{} upon request or by pull requests from external contributors.  A flow-chart illustrating the role of different tools in the \mapyde{} pipeline is shown in Fig.~\ref{fig:mapydeoverview}.
+and was named after the first three tools in a typical \mapyde{} simulation pipeline: \madgraph, \pythia, and \delphes{} (\textsc{MaPyDe}).  Additional tools, such as tools listed in \Cref{sec:introduction}, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and more natively supported in future versions of \mapyde{} upon request or by pull requests from external contributors.  A flow chart illustrating the role of different tools in the \mapyde{} pipeline is shown in Fig.~\ref{fig:mapydeoverview}.
 
 \begin{figure}[tbp]
 	\centering
@@ -155,13 +139,11 @@ and was named after the first three tools in a typical \mapyde{} simulation pipe
 	\label{fig:mapydeoverview}
 \end{figure}
 
-A \mapyde{} pipeline is constructed as a series of containerized transforms, with the \mapyde{} package providing configuration and steering of the individual stages.  The use of containers allows the \mapyde{} package to remain lightweight and easy to install, while still enabling event generation/simulation and subsequent data analysis steps to run on any system that provides Docker or Singularity/Apptainer.  Default containers are provided for \madgraph+\pythia, for \delphes, and for probability model fitting with \pyhf.  The ATLAS collaboration provides containers that implement the \simpleanalysis{} routines used to describe the analyses reinterpreted in \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas}.  Users can also provide their own containers for any stage of the analysis.  % mention container registry, point to documentation on container versions?
+A \mapyde{} pipeline is constructed as a series of containerized transforms, with the \mapyde{} package providing configuration and steering of the individual stages.  The use of containers allows the \mapyde{} package to remain lightweight and easy to install, while still enabling event generation/simulation and subsequent data analysis steps to run on any system that provides Docker or Singularity/Apptainer.  Default containers are provided for \madgraph+\pythia, for \delphes, and for probability model fitting with \pyhf.  The ATLAS collaboration provides containers that implement the \simpleanalysis{} routines used to describe the analyses reinterpreted in \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas}.  Containers for a variety of different \madgraph+\pythia{} releases are provided in the \mapyde{} \texttt{github} container registry.  Users can also provide their own containers for any stage of the analysis.
 
-The \mapyde{} workflow is controlled by a user-generated dictionary that encodes the configuration for all stages of the analysis.  Templates for this dictionary are provided, and custom templates can be used to provide a consistent reference for subsequent analysis runs that modify a small number of configuration parameters.  The configuration dictionary offers direct access to parameters in the \madgraph{} run card, in addition to allowing the user to point towards custom process and model parameter cards.  An example configuration card is provided in \Cref{sec:input-configuration-for-a-slepton-sample}.
+The \mapyde{} workflow is controlled by a user-generated dictionary that encodes the configuration for all stages of the analysis.  Templates for this dictionary are provided, and custom templates can be used to provide a consistent reference for subsequent analysis runs that modify a small number of configuration parameters.  The configuration dictionary offers direct access to parameters in the \madgraph{} run card, in addition to allowing the user to point towards custom process and model parameter cards.  Analyses performed with \mapyde{} can use either a command-line interface or take advantage of direct access to python functions.  The command-line interface is implemented with the \texttt{click} python package, and takes a \toml{} configuration file as input, which is translated internally into the configuration dictionary.  The python interface to \mapyde{} can either parse a \toml{} input file or accept the configuration dictionary directly.  An example \toml{} configuration card is provided in \Cref{sec:input-configuration-for-a-slepton-sample}.
 
-Analyses performed with \mapyde{} can use either a command-line interface or take advantage of direct access to python functions.  The command-line interface is implemented with the \texttt{click} python package, and takes a \toml{} configuration file as input, which is translated internally into the configuration dictionary.  The python interface to \mapyde{} can either parse a \toml{} input file or accept the configuration dictionary directly.
-
-In the containers provided by \mapyde, \madgraph{} and \pythia{} are bundled together and are both launched through a \madgraph{} control file that is generated based on the \mapyde{} configuration dictionary.  The \madgraph{} outputs are stored as Les Houches Event (LHE) records, and are passed directly into \pythia{} for parton showering and hadronization.  The \pythia{} outputs in \hepmc{} format are then passed into \delphes{} (or directly into \simpleanalysis{} in pipelines that want to evaluate the acceptance of an analysis selection without detector simulation).  Outputs from \delphes{} in \ROOT{} format are passed to an intermediate stage that either analyzes the \delphes{} output or transforms it into a format able to be processed by the next step in the pipeline.  In the results presented below, we use a script that converts the \delphes{} output into a \ROOT{} file that can serve as input to the \simpleanalysis{} phase called \texttt{Delphes2SA.py}.  The output of \simpleanalysis{} is then processed into \json{} format in another custom script called \texttt{SA2JSON.py}.  That script encodes a mapping from the branch names in the \simpleanalysis{} output file to the signal region names in the public probability model provided with the published analysis.  The result of that transform can then be used to patch the serialized probability model and perform the hypothesis test of the generated signal.  In the cases presented below, we perform the hypothesis test with the \texttt{muscan.py} script, whose output is a \json{} file containing both the 95\% confidence level upper limits on the signal strength $\mu$ as well as the full configuration dictionary used for the job.  These outputs can then be used to determine if a given set of parameters used to generate events for the hypothesis test are compatible with existing limits or not.  All outputs from intermediate stages of the analysis chain are kept to facilitate re-running the pipeline from an arbitrary starting point.
+In the containers provided by \mapyde, \madgraph{} and \pythia{} are bundled together and are both launched through a \madgraph{} control file that is generated based on the \mapyde{} configuration dictionary.  The \madgraph{} outputs are stored as Les Houches Event (LHE) records, and are passed directly into \pythia{} for parton showering and hadronization.  The \pythia{} outputs in \hepmc{} format are then passed into \delphes{} (or directly into \simpleanalysis{} in pipelines that want to evaluate the acceptance of an analysis selection without detector simulation).  Outputs from \delphes{} in \ROOT{} format are passed to an intermediate stage that either analyzes the \delphes{} output or transforms it into a format able to be processed by the next step in the pipeline.  In the results presented below, we use a script that converts the \delphes{} output into a \ROOT{} file that can serve as input to the \simpleanalysis{} phase, called \texttt{Delphes2SA.py}.  The output of \simpleanalysis{} is then processed into \json{} format in another custom script called \texttt{SA2JSON.py}.  That script encodes a mapping from the branch names in the \simpleanalysis{} output file to the signal region names in the public probability model provided with the published analysis.  The result of that transform can then be used to patch the serialized probability model and perform hypothesis tests with the generated signal.  In the cases presented below, we perform the hypothesis test with the \texttt{muscan.py} script, whose output is a \json{} file containing both the 95\% confidence level upper limits on the signal strength $\mu$ as well as the full configuration dictionary used for the job.  These outputs can then be used to determine if a given set of parameters used to generate events for the hypothesis test are compatible with existing limits or not.  All outputs from intermediate stages of the analysis chain are kept to facilitate re-running the pipeline from an arbitrary starting point.
 
 \section{Reinterpreting Compressed SUSY Searches from ATLAS}
 \label{sec:reinterpreting-compressed-susy-searches-from-atlas}
@@ -171,9 +153,9 @@ We demonstrate the utility of the \mapyde{} analysis chain by reproducing and re
 \subsection{Implementation}
 \label{ssec:implementation}
 
-We use \mapyde{} to generate, shower, and simulate SUSY events, to analyze them using \simpleanalysis, and to interpret the results using \pyhf.  The implementation corresponds to \mapyde{} version \textcolor{red}{xxx, need to update to latest version and confirm it still runs}, with configuration cards and scripts provided in a public github repository~\cite{mapyde-user} (\textcolor{red}{need to fix up that area if Giordon hasn't done it already}).  The configuration uses \madgraph{} version 2.9.3, \pythia{} version 8.306, \delphes{} version 3.5.0, and \simpleanalysis{} version 1.1.0.  The \simpleanalysis{} code runs on dedicated containers provided by ATLAS~\cite{SAGitLabRegistry}, where we use the \enquote{\texttt{EwkCompressed2018}} selection corresponding to the analyses from Ref.~\cite{ATLAS:2019lng}.  The \mapyde{} package includes resources to convert the \delphes{} ROOT output into inputs for \simpleanalysis{} (\texttt{delphes2SA}) and from \simpleanalysis{} ROOT file outputs to JSON format (\texttt{SA2JSON}) used as input for \pyhf.  We use \pyhf{} version \textcolor{red}{xxx (need to figure out what we're running in \texttt{pyplotting})} to patch the public probability models provided in the \hepdata~\cite{HepData} repository for Ref.~\cite{ATLAS:2019lng} with the signal yields from \mapyde, and to compute upper limits on the signal strength, \musig.  When reproducing the results for the same benchmark models from Ref.~\cite{ATLAS:2019lng} the \pyhf{} output is compared with limit contours provided in \hepdata.
+We use \mapyde{} to generate, shower, and simulate SUSY events, to analyze them using \simpleanalysis, and to interpret the results using \pyhf.  The implementation corresponds to \mapyde{} version 0.5.0, with configuration cards and scripts provided in a public github repository~\cite{mapyde-user}.  The configuration uses \madgraph{} version 2.9.3, \pythia{} version 8.306, \delphes{} version 3.5.0, and \simpleanalysis{} version 1.1.0.  The \simpleanalysis{} code runs on dedicated containers provided by ATLAS~\cite{SAGitLabRegistry}, where we use the \enquote{\texttt{EwkCompressed2018}} selection corresponding to the analyses from Ref.~\cite{ATLAS:2019lng}.  We use \pyhf{} version 0.6.3 to patch the public probability models provided in the \hepdata~\cite{HepData} repository for Ref.~\cite{ATLAS:2019lng} with the signal yields from \mapyde, and to compute upper limits on the signal strength, \musig.  When reproducing the results for the same benchmark models from Ref.~\cite{ATLAS:2019lng} the \pyhf{} output is compared with limit contours provided in \hepdata.
 
-The signal samples produced in our \mapyde{} workflow differ from those used in Ref.~\cite{ATLAS:2019lng} in three significant ways.  First, events in the ATLAS samples contained up to two jets in the matrix element in addition to a pair of SUSY particles, with different jet multuplicity processes merged in the parton shower using the CKKW-L algorithm.  In our setup, we produce only one-jet events in \madgraph, and allow \pythia{} to model the contributions from additional emissions.  Second, the ATLAS samples use \madspin{} to perform the three-body decays of the electroweakinos to SM leptons and a \chioz, while we perform decays using \pythia.  Third, and most importantly, the ATLAS samples use ATLAS simulation and reconstruction software to transform the \pythia{} output into ROOT files containing physics objects, while we use \delphes.
+The signal samples produced in our \mapyde{} workflow differ from those used in Ref.~\cite{ATLAS:2019lng} in three significant ways.  First, events in the ATLAS samples contained up to two jets in the matrix element in addition to a pair of SUSY particles, with different jet multuplicity processes merged in the parton shower using the CKKW-L algorithm.  In our samples, we produce only one-jet events in \madgraph, and allow \pythia{} to model the contributions from additional emissions.  Second, the ATLAS samples use \madspin{} to perform the three-body decays of the electroweakinos to SM leptons and a \chioz, while we perform decays using \pythia.  Third, and most importantly, the ATLAS samples use ATLAS simulation and reconstruction software to transform the \pythia{} output into ROOT files containing physics objects, while we use \delphes.
 
 The impact of the first two differences is evaluated by comparing the acceptance of the event selection applied to events at particle level.  ATLAS provides the acceptance of the event selection by processing particle-level events with \simpleanalysis{} as part of the public event record of the search.  We perform a similar calculation by passing the \hepmc{} event record from \pythia{} directly into \simpleanalysis{} using \mapyde.  The resulting signal region yields are then compared to the product of the ATLAS acceptance, cross section, branching ratio, and integrated luminosity.  On average we find that the \mapyde{} and ATLAS acceptances are very similar, except for very compressed points where on average the ATLAS acceptance is approximately 10\% higher.
 
@@ -191,16 +173,16 @@ We first reproduce the results of the ATLAS search for compressed sleptons.  The
 	\label{fig:feynman:slepton_wino_bino}
 \end{figure}
 
-After the acceptance corrections described above, the lepton efficiencies in \delphes{} are tuned to reproduce the ATLAS signal yields.  The efficiencies of electrons and muons after object selection are provided as part of the public record for Ref.~\cite{ATLAS:2019lng} and are the starting point for the modified \delphes{} configuration used to reproduce the ATLAS results.  We find that setting all electron and muon efficiencies in \delphes{} to the upper range of values reported in Fig. 3 of~\cite{ATLAS:2019lng} is sufficient to reproduce the results of the ATLAS slepton and electroweakino searches to adequate precision, as shown in~\Cref{fig:SleptonBino,fig:Higgsino} below.  The only exception is the lowest \pt{} bin for both electrons and muons, where the \mapyde{} efficiencies needed to reproduce the ATLAS limits are roughly 15\% higher than the values reported by ATLAS. \Cref{fig:SleptonBino} also shows the model constraints for the slepton-bino search when using the default \delphes{} configuration card, which does a reasonable job of describing the high-splitting regions, but fails to describe the most compressed mass points, which are most sensitive to the low-\pt{} lepton efficiencies provided by ATLAS.
+After the acceptance corrections described above, the lepton efficiencies in \delphes{} are tuned to reproduce the ATLAS signal yields.  The efficiencies of electrons and muons after object selection are provided as part of the public record for Ref.~\cite{ATLAS:2019lng} and are the starting point for the modified \delphes{} configuration used to reproduce the ATLAS results.  We find that setting all electron and muon efficiencies in \delphes{} to the upper range of values reported in Fig. 3 of~\cite{ATLAS:2019lng} is sufficient to reproduce the results of the ATLAS slepton and electroweakino searches to adequate precision, as shown in~\Cref{fig:SleptonBino,fig:Higgsino}.  The only exception is the lowest \pt{} bin for both electrons and muons, where the \mapyde{} efficiencies needed to reproduce the ATLAS limits are roughly 15\% higher than the values reported by ATLAS. \Cref{fig:SleptonBino} also shows the model constraints for the slepton-bino search when using the default \delphes{} configuration card, which does a reasonable job of describing the high-splitting regions, but fails to describe the most compressed mass points, which are most sensitive to the low-\pt{} lepton efficiencies provided by ATLAS.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{{./figures/SleptonBino}}         %% examples/mapyde/SleptonBino_contours.ipynb
+	\includegraphics[width=0.5\textwidth]{{./figures/SleptonBino}}
 	\caption{Constraints on the slepton-bino model from: the ATLAS paper~\cite{ATLAS:2019lng} (blue dots); \mapyde{} before tuning the \delphes{} lepton efficiencies (orange solid); and \mapyde{} after tuning (blue solid).}
 	\label{fig:SleptonBino}
 \end{figure}
 
-With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays with 100\% branching ratio to a wino-like \chitz{} NLSP and a SM charged lepton, with the \chitz{} decaying to a \chioz{} and two soft fermions, as illustrated in~\Cref{fig:feynman:slepton_wino_bino}. In order to reconstruct a lepton to be selected by the analysis, the slepton can decay either through a $\chitz$ or $\chiopm$ as illustrated in~\Cref{fig:feynman:slepton_decays}.  We find that the low branching ratio of the intermediate $W^\pm$ to leptons significantly reduces the contributions from events with \chiopm-mediated decays, leaving the decays through \chitz{} most relevant for the reinterpretation.  In such events, the \pt{} of the SM lepton will be largely determined by the slepton-\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the slepton-\chioz{} mass gap.
+With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays with 100\% branching ratio to a wino-like \chitz{} NLSP and a SM charged lepton, with the \chitz{} decaying to a \chioz{} and two soft fermions, as illustrated in~\Cref{fig:feynman:slepton_wino_bino}. In order to reconstruct a lepton to be selected by the analysis, the slepton can decay either through a $\chitz$ or $\chiopm$ as illustrated in~\Cref{fig:feynman:slepton_decays}.  We find that the low branching ratio of the intermediate $W^\pm$ to leptons significantly reduces the contributions from events with \chiopm-mediated decays, leaving the decays through \chitz{} most relevant for the reinterpretation.  In such events, the \pt{} values of the SM leptons will be largely determined by the slepton-\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the slepton-\chioz{} mass gap.
 
 \begin{figure}
 	\centering
@@ -210,12 +192,12 @@ With the framework tuned to the ATLAS response for compressed SUSY events, we no
 	\label{fig:feynman:slepton_decays}
 \end{figure}
 
-We parameterize the model in terms of the slepton mass, the slepton-\chioz{} mass gap, and the \chitz-\chioz{} mass gap, to allow us to display the model constraints in the same plane as the slepton-bino results from ATLAS.  The resulting constraints (both expected and observed) are shown in~\Cref{fig:SleptonWinoBino} for a range of \chitz-\chioz{} splittings.  At small splittings the results resemble those of the slepton-bino model, since the \chitz{} is nearly degenerate with the \chioz{} leading to virtually no kinematic difference arising from the additional soft decay products.  By contrast, for large \chitz-\chioz{} splittings, given the requirement that the slepton must decay through a \chitz, the constrained parameter space is forced towards larger slepton-\chioz{} splittings.  Constraints on such models cover a smaller range in slepton masses due to small slepton-\chitz{} splitting, which leads to softer SM leptons and lower lepton efficiencies.
+We parameterize the model in terms of the slepton mass, the slepton-\chioz{} mass gap, and the \chitz-\chioz{} mass gap, to allow us to display the model constraints in the same plane as the slepton-bino results from ATLAS.  The resulting constraints (both expected and observed) are shown in~\Cref{fig:SleptonWinoBino} for a range of \chitz-\chioz{} splittings.  At small splittings the results resemble those of the slepton-bino model, since the \chitz{} is nearly degenerate with the \chioz{} leading to virtually no kinematic difference arising from the additional soft decay products.  By contrast, for large \chitz-\chioz{} splittings, given the requirement that the slepton must decay through a \chitz, the disallowed parameter space is forced towards larger slepton-\chioz{} splittings.  Constraints on such models cover a smaller range in slepton masses due to small slepton-\chitz{} splitting, which leads to softer SM leptons and lower lepton efficiencies.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
-	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs}}     %% examples/mapyde/SleptonWinoBino_contours.ipynb
+	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp}}
+	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs}}
 	\caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
 	\label{fig:SleptonWinoBino}
 \end{figure}
@@ -225,11 +207,11 @@ This class of models, while being less \enquote{simplified} than the slepton-bin
 \subsection{Compressed Electroweakinos}
 \label{ssec:compressed-electroweakinos}
 
-The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz{} states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples uses the same $k$-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in~\Cref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS.
+The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz{} states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples use the same $k$-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in~\Cref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{{./figures/Higgsino}}         %% examples/mapyde/EWKino_contours.ipynb
+	\includegraphics[width=0.5\textwidth]{{./figures/Higgsino}}
 	\caption{Constraints on the \enquote{pure Higgsino} simplified model from ATLAS (blue dots) and \mapyde{} (blue solid).}
 	\label{fig:Higgsino}
 \end{figure}
@@ -242,14 +224,14 @@ The ATLAS search for compressed electroweakinos considered two different simplif
 	\label{fig:feynman:ewkinos}
 \end{figure}
 
-We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to \enquote{wino-bino-higgsino} models that have potentially rich phenomenologies. Some example models we are exploring the sensitivity to are illustrated in~\Cref{fig:feynman:ewkinos}. We use a pMSSM scanning tool (\easyscanhep~\cite{easyscanhep,Han:2016gvr}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from -500 GeV to 500 GeV, sampled with flat priors, defined in~\Cref{lst:easyscanini}.  Particle masses are calculated using \spheno~\cite{Porod:2003um,Porod:2011nf} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  Additional tools are run as described in~\Cref{sec:easyscan-hep-configuration}.  From this sample we select (\Cref{lst:mask}) 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation with \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output.
+We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to \enquote{wino-bino-higgsino} models that have potentially rich phenomenologies. Some example models are illustrated in~\Cref{fig:feynman:ewkinos}. We use a pMSSM scanning tool (\easyscanhep~\cite{easyscanhep,Han:2016gvr}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from -500 GeV to 500 GeV, sampled with flat priors, defined in~\Cref{lst:easyscanini}.  Particle masses are calculated using \spheno~\cite{Porod:2003um,Porod:2011nf} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  Additional tools are run as described in~\Cref{sec:easyscan-hep-configuration}.  From this sample we select (\Cref{lst:mask}) 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation with \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output.
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{python}
-(SP_m_h!=-1) & (SPfh_m_h!=-1) & (MO_Omega!=-1) # spheno, feynhiggs, and micromegas ok
-  & (SI_BR_Bs_to_mumu!=-1) & (GM2_gmuon!=-1) # superiso and gm2calc ok
-  & (SP_m_chi_10>100) & (abs(SP_m_chi_30)<300) # N1 > 100 GeV, N3 < 300 GeV
-  & ((abs(SP_m_chi_30)-abs(SP_m_chi_10))<50) # m(N3, N1) < 50 GeV
+    (SP_m_h!=-1) & (SPfh_m_h!=-1) & (MO_Omega!=-1) # spheno, feynhiggs, and micromegas ok
+    & (SI_BR_Bs_to_mumu!=-1) & (GM2_gmuon!=-1) # superiso and gm2calc ok
+    & (SP_m_chi_10>100) & (abs(SP_m_chi_30)<300) # N1 > 100 GeV, N3 < 300 GeV
+    & ((abs(SP_m_chi_30)-abs(SP_m_chi_10))<50) # m(N3, N1) < 50 GeV
   \end{minted}
 	\caption{The mask used to define the selection of models for assessing the ATLAS sensitivity to Higgsino-Wino models.}
 	\label{lst:mask}
@@ -260,8 +242,8 @@ The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in 
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_exp}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
-	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_obs}}   %% examples/mapyde/WinoHiggsino_pmssm_contours.ipynb
+	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_exp}}
+	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_obs}}
 	\caption{Expected (left) and observed (right) constraints on wino-bino-higgsino models containing three light neutralinos.  Black dots represent the specific model points used to calculate the fraction of excluded models within a bin, shown in color.  White bins contain no models from the current scan.  Results from an ATLAS search for pure Higgsinos are overlaid in blue dots.}
 	\label{fig:EWKino_pmssm}
 \end{figure}
@@ -269,7 +251,7 @@ The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in 
 \section{Conclusion}
 \label{sec:conclusion}
 
-The combination of rich physics results from the LHC with public supplementary material, including analysis routines and probability models, has opened the door to new ways of constraining new models of BSM physics with already-published results.  We demonstrate one such pipeline, implemented in the \mapyde{} python package, that facilitates the re-use of LHC analyses.  We demonstrate the utility \mapyde{} by probing previously-untested models of supersymmetry, including a simplified model of sleptons that undergo cascade decays to wino-like and bino-like electroweakinos, and a parameter scan of highly-mixed higgsino, wino, and bino states with a rich set of possible decay chains.  In both cases we find that existing searches are able to constrain non-trivial regions of parameter space that would have been difficult or impossible to predict by simple extrapolations of existing limits on less complicated models.
+The combination of rich physics results from the LHC with public supplementary material, including analysis routines and probability models, has opened the door to new ways of constraining unexplored models of BSM physics with already-published results.  We demonstrated one such pipeline, implemented in the \mapyde{} python package, that facilitates the re-use of LHC analyses.  We illustrated the utility of \mapyde{} by probing previously-untested models of supersymmetry, including a simplified model of sleptons that undergo cascade decays to wino-like and bino-like electroweakinos, and a parameter scan of highly-mixed higgsino, wino, and bino states with a rich set of possible decay chains.  In both cases we find that existing searches are able to constrain non-trivial regions of parameter space that would have been difficult or impossible to predict by simple extrapolations of existing results.
 
 \printbibliography
 
