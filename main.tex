@@ -56,6 +56,8 @@
 \newcommand{\musig}{\ensuremath{\mu_{\mathrm{sig}}}}
 \newcommand{\hepdata}{\texttt{HEPData}}
 \newcommand{\hepmc}{\textsc{hepmc}}
+\newcommand{\ROOT}{\textsc{root}}
+\newcommand{\json}{\texttt{json}}
 \newcommand{\pt}{\ensuremath{p_{\mathrm{T}}}}
 \newcommand{\easyscanhep}{\textsc{EasyScan\_HEP}}
 \newcommand{\spheno}{\textsc{Spheno}}
@@ -64,6 +66,7 @@
 \newcommand{\superiso}{\textsc{SuperIso}}
 \newcommand{\gmtwocalc}{\textsc{GM2Calc}}
 \newcommand{\recast}{\textsc{recast}}
+\newcommand{\toml}{\textsc{toml}}
 
 \newcommand{\thistitle}{Reduce, Reuse, Reinterpret: an end-to-end pipeline for recycling particle physics results}
 \newbox{\myorcidaffilbox}
@@ -106,7 +109,7 @@
 \maketitle
 
 \begin{abstract}
-	Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized probability models, in a way that provides accurate constraints even for models that differ meaningfully from the benchmark models of the original analysis.  The public analysis information is combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \textsc{TOML} configuration files, and bundled into the \mapyde{}~\cite{mapyde} python package.  The use of \mapyde{} is demonstrated by constraining SUSY models with compressed sleptons and electroweakinos using ATLAS results.
+	Searches for new physics at the Large Hadron Collider have constrained many models of physics beyond the Standard Model.  Many searches also provide resources that allow them to be reinterpreted in the context of other models.  We describe a reinterpretation pipeline that examines previously untested models of new physics using supplementary information from ATLAS SUSY searches, such as public analysis routines and serialized probability models, in a way that provides accurate constraints even for models that differ meaningfully from the benchmark models of the original analysis.  The public analysis information is combined with common event generation and simulation toolkits \madgraph, \pythia, and \delphes{} into workflows steered by \toml{} configuration files, and bundled into the \mapyde{}~\cite{mapyde} python package.  The use of \mapyde{} is demonstrated by constraining SUSY models with compressed sleptons and electroweakinos using ATLAS results.
 \end{abstract}
 
 
@@ -125,30 +128,23 @@ Existing toolkits solve the reinterpretation problem in various ways, as describ
 % this is not the best, just starting somewhere.
 Recent progress in releasing full public probability models has further expanded the possibilities for reinterpreting LHC analyses.  It is no longer a technical challenge to assess the sensitivity of an LHC analysis with a public serialized probability model, including all uncertainties and correlations, to an arbitrary model of new physics.  The only challenge that remains is to evaluate the acceptance and efficiency of the analysis to the new model.  This can be done using public event generation and detector simulation tools, informed by the experimental details of the reference analysis.
 
-In this paper we present a new pipeline for calculating the constraints on new physics from existing analyses with public probability models. This pipeline is built using \mapyde, a pure-python package that chains public tools in HEP with a single configuration file. Additionally, \mapyde{} provides a user-friendly interface to configure, run, and extend the toolchain with other tools as needed.
-
-% needed?
-This paper is organized as follows. \Cref{sec:the-toolkit} describes the \mapyde{} toolkit, including the software employed, the configuration, and deployment in containerized environments.  \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas} describes several example use-cases for \mapyde: reproducing existing ATLAS results; testing a new simplified model of slepton-wino-bino production; and running a pMSSM-like scan of electroweak SUSY model parameters to test SUSY models with mixed wino-bino-higgsino states.
+In this paper we present a new pipeline for calculating the constraints on new physics from existing analyses with public probability models. This pipeline is built using \mapyde, a pure-python package that chains public tools in HEP with a single configuration file. Additionally, \mapyde{} provides a user-friendly interface to configure, run, and extend the toolchain with other tools as needed.  The \mapyde{} toolkit is described in \Cref{sec:the-toolkit}, including the software employed, the configuration, and deployment in containerized environments.  Two example uses of the \mapyde{} toolkit are provided in \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas}, which in which we reproduce existing ATLAS results, test a new simplified model of slepton-wino-bino production, and run a pMSSM-like scan of electroweak SUSY model parameters to test SUSY models with mixed wino-bino-higgsino states.
 
 \section{The \mapyde{} toolkit}
 \label{sec:the-toolkit}
 
 % TODO: add citation for v0.5.0 of mapyde
-This paper focuses on version \texttt{v0.5.0} of \mapyde{} which comes out of the box with the ability to run:
+This paper describes the implementation of, and results obtained with, version \texttt{v0.5.0} of \mapyde.  The \mapyde{} package provides support for using the following tools:
 
 \begin{itemize}
 	\item \madgraph~\cite{Alwall:2014hca,Frederix:2018nkq} (event generation)
 	\item \pythia~\cite{Bierlich:2022pfr} (particle showering)
 	\item \delphes~\cite{deFavereau:2013fsa,Selvaggi:2014mya,Mertens:2015kba} (detector simulation)
-	\item \simpleanalysis~\cite{simpleanalysis,atlas_simpleanalysis} (provided by ATLAS)
-	\item \pyhf~\cite{pyhf,pyhf_joss} (provided by SciKit-HEP)
+	\item \simpleanalysis~\cite{simpleanalysis,atlas_simpleanalysis} (analysis description)
+	\item \pyhf~\cite{pyhf,pyhf_joss} (probability model fitting)
 \end{itemize}
 
-\mapyde{} was named after the primary three tools included: \madgraph, \pythia, and \delphes{} (\textsc{MaPyDe}). Additional tools, such as those described above, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and more natively supported in future versions of \mapyde upon request or by pull requests from external contributors.  A flow-chart illustrating the role of different tools in the \mapyde{} pipeline is shown in Fig.~\ref{fig:mapydeoverview}.
-
-% Don't need this, I don't think.
-%\subsection{Code Structure}
-%\label{ssec:code-structure}
+and was named after the first three tools in a typical \mapyde{} simulation pipeline: \madgraph, \pythia, and \delphes{} (\textsc{MaPyDe}).  Additional tools, such as tools listed in \Cref{sec:introduction}, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and more natively supported in future versions of \mapyde{} upon request or by pull requests from external contributors.  A flow-chart illustrating the role of different tools in the \mapyde{} pipeline is shown in Fig.~\ref{fig:mapydeoverview}.
 
 \begin{figure}[tbp]
 	\centering
@@ -157,24 +153,13 @@ This paper focuses on version \texttt{v0.5.0} of \mapyde{} which comes out of th
 	\label{fig:mapydeoverview}
 \end{figure}
 
-% mention needed transition from SA -> pyhf via sa2json
-% standardize that the branch names map onto what is in the serialized probability models
+A \mapyde{} pipeline is constructed as a series of containerized transforms, with the \mapyde{} package providing configuration and steering of the individual stages.  The use of containers allows the \mapyde{} package to remain lightweight and easy to install, while still enabling event generation/simulation and subsequent data analysis steps to run on any system that provides Docker or Singularity/Apptainer.  Default containers are provided for \madgraph+\pythia, for \delphes, and for probability model fitting with \pyhf.  The ATLAS collaboration provides containers that implement the \simpleanalysis{} routines used to describe the analyses reinterpreted in \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas}.  Users can also provide their own containers for any stage of the analysis.  % mention container registry, point to documentation on container versions?
 
-\begin{itemize}
-	\item Tools:
-	      \begin{itemize}
-		      \item General tools: Madgraph, Pythia, Delphes
-		      \item ATLAS tools: SA
-		      \item Fits: pyhf
-	      \end{itemize}
-	\item Configuration: TOML files
-	\item Runtime:
-	      \begin{itemize}
-		      \item Docker containers
-		      \item Python steering
-	      \end{itemize}
-	\item Outputs
-\end{itemize}
+The \mapyde{} workflow is controlled by a user-generated dictionary that encodes the configuration for all stages of the analysis.  Templates for this dictionary are provided, and custom templates can be used to provide a consistent reference for subsequent analysis runs that modify a small number of configuration parameters.  The configuration dictionary offers direct access to parameters in the \madgraph{} run card, in addition to allowing the user to point towards custom process and model parameter cards.  An example configuration card is provided in \Cref{sec:input-configuration-for-a-slepton-sample}.
+
+Analyses performed with \mapyde{} can use either a command-line interface or take advantage of direct access to python functions.  The command-line interface is implemented with the \texttt{click} python package, and takes a \toml{} configuration file as input, which is translated internally into the configuration dictionary.  The python interface to \mapyde{} can either parse a \toml{} input file or accept the configuration dictionary directly.
+
+In the containers provided by \mapyde, \madgraph{} and \pythia{} are bundled together and are both launched through a \madgraph{} control file that is generated based on the \mapyde{} configuration dictionary.  The \madgraph{} outputs are stored as Les Houches Event (LHE) records, and are passed directly into \pythia{} for parton showering and hadronization.  The \pythia{} outputs in \hepmc{} format are then passed into \delphes{} (or directly into \simpleanalysis{} in pipelines that want to evaluate the acceptance of an analysis selection without detector simulation).  Outputs from \delphes{} in \ROOT{} format are passed to an intermediate stage that either analyzes the \delphes{} output or transforms it into a format able to be processed by the next step in the pipeline.  In the results presented below, we use a script that converts the \delphes{} output into a \ROOT{} file that can serve as input to the \simpleanalysis{} phase called \texttt{Delphes2SA.py}.  The output of \simpleanalysis{} is then processed into \json{} format in another custom script called \texttt{SA2JSON.py}.  That script encodes a mapping from the branch names in the \simpleanalysis{} output file to the signal region names in the public probability model provided with the published analysis.  The result of that transform can then be used to patch the serialized probability model and perform the hypothesis test of the generated signal.  In the cases presented below, we perform the hypothesis test with the \texttt{muscan.py} script, whose output is a \json{} file containing both the 95\% confidence level upper limits on the signal strength $\mu$ as well as the full configuration dictionary used for the job.  These outputs can then be used to determine if a given set of parameters used to generate events for the hypothesis test are compatible with existing limits or not.  All outputs from intermediate stages of the analysis chain are kept to facilitate re-running the pipeline from an arbitrary starting point.
 
 \section{Reinterpreting Compressed SUSY Searches from ATLAS}
 \label{sec:reinterpreting-compressed-susy-searches-from-atlas}
@@ -329,6 +314,115 @@ Input parametes:   tanb,  Flat,  1,     60
   \end{minted}
 	\caption{A portion of the \texttt{easyscan.ini} configuration defining the random sampling for the electroweakinos scan.}
 	\label{lst:easyscanini}
+\end{listing}
+
+\section{Input \toml{} Configuration for a Slepton Sample}
+\label{sec:input-configuration-for-a-slepton-sample}
+
+%% to-do: add descriptions of all these parameters.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
+[base]
+path = "{{PWD}}"
+output = "output"
+logs = "logs"
+data_path = "{{MAPYDE_DATA}}"
+cards_path = "{{MAPYDE_CARDS}}"
+scripts_path = "{{MAPYDE_SCRIPTS}}"
+process_path = "{{MAPYDE_CARDS}}/process/"
+param_path = "{{MAPYDE_CARDS}}/param/"
+run_path = "{{MAPYDE_CARDS}}/run/"
+pythia_path = "{{MAPYDE_CARDS}}/pythia/"
+delphes_path = "{{MAPYDE_CARDS}}/delphes/"
+madspin_path = "{{MAPYDE_CARDS}}/madspin/"
+likelihoods_path = "{{MAPYDE_LIKELIHOODS}}"
+
+[madgraph]
+skip = false
+params = "SleptonBino"
+ecms = 13000
+cores = 1
+nevents = 50000
+seed = 0
+version = "madgraph:2.9.3"
+batch = false
+paramcard = "{{madgraph['params']}}.slha"
+
+[madgraph.generator]
+output = "run.mg5"
+
+[madgraph.masses]
+MSLEP = 250
+MN1 = 240
+
+[madgraph.run]
+card = "default_LO.dat"
+
+[madgraph.run.options]
+mmjj = 0
+mmjjmax = -1
+deltaeta = 0
+ktdurham = -1
+xqcut = -1
+ptj = 20
+ptj1min = 50
+
+[madgraph.proc]
+name = "isrslep"
+card = "{{madgraph['proc']['name']}}"
+  \end{minted}
+	\caption{Part 1 of an example full TOML configuration file for generating slepton events.}
+	\label{slepton-config-1}
+\end{listing}
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
+[madspin]
+skip = true
+card = ''
+
+[pythia]
+skip = false
+card = "pythia8_card.dat"
+additional_opts = ""
+
+[delphes]
+skip = false
+additional_opts = ""
+card = "delphes_card_ATLAS_lowptleptons_sleptons_notrackineffic.tcl"
+version = "delphes"
+output = "delphes/delphes.root"
+
+[analysis]
+script = "Delphes2SA.py"
+XSoverride = -1
+kfactor = 1.18
+output = "analysis/Delphes2SA.root"
+lumi = 139000
+
+[simpleanalysis]
+skip = false
+additional_opts = ""
+name = "EwkCompressed2018"
+input = ""
+outputtag = ""
+
+[sa2json]
+inputs = "{{simpleanalysis['name']}}{{simpleanalysis['outputtag']}}.root"
+image = "pyplotting:latest"
+output = "{{simpleanalysis['name']}}{{simpleanalysis['outputtag']}}_patch.json"
+options = "-c"
+
+[pyhf]
+skip = false
+likelihood = "Slepton_bkgonly.json"
+image = "pyplotting:latest"
+gpu-options = "-c -B jax"
+other-options = ""
+  \end{minted}
+	\caption{Part 2 of an example full TOML configuration file for generating slepton events.}
+	\label{slepton-config-2}
 \end{listing}
 
 
