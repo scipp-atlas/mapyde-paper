@@ -303,7 +303,12 @@ Input parametes:   tanb,  Flat,  1,     60
 \section{Input \toml{} Configuration for a Slepton Sample}
 \label{sec:input-configuration-for-a-slepton-sample}
 
-%% to-do: add descriptions of all these parameters.
+The configuration dictionary used within \mapyde{} can be created as a python dictionary and passed to \mapyde{} through the python interface, or can be generated from a \toml{} configuration file.  We provide an example \toml{} configuration file below.  The code in this section represents a single file, but is described in blocks for easier interpretation.
+
+\subsection{The \texttt{base} block}
+\label{ssec:the-base-block}
+
+The \texttt{base} block provides \mapyde{} with paths for inputs and outputs of the analysis pipeline.  Users can take advantage of pre-generated configuration cards \pythia{} and \delphes, but will usually at least need to define their own process cards for generating events with \madgraph.
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{ini}
@@ -321,83 +326,211 @@ pythia_path = "{{MAPYDE_CARDS}}/pythia/"
 delphes_path = "{{MAPYDE_CARDS}}/delphes/"
 madspin_path = "{{MAPYDE_CARDS}}/madspin/"
 likelihoods_path = "{{MAPYDE_LIKELIHOODS}}"
+        \end{minted}
+	\caption{The \texttt{base} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-base}
+\end{listing}
 
+\subsection{The \texttt{madgraph} block}
+\label{ssec:the-madgraph-block}
+
+The \texttt{madgraph} block defines some top-level options for running madgraph, such as:
+
+\begin{itemize}
+	\item whether or not to skip the \madgraph{} job, sometimes useful when re-running an analysis chain and re-using LHE inputs from a previous job
+	\item the name of the \texttt{param} card to use, in this example making use of a \toml{} feature that allows references to other \toml{} parameters
+	\item Some commonly-changed run parameters like \texttt{nevents}, \texttt{seed}, and \texttt{ecms}
+	\item the number of jobs to run in parallel when generating \madgraph{} events and when processing those events in \pythia
+	\item The name of the container that provides the version of \madgraph{} to use, in this case version 2.9.3 (taken from the \texttt{github} container registry)
+\end{itemize}
+
+
+
+These options, and options from subsequent \madgraph-related blocks, are processed by \mapyde{} to produce a \madgraph{} run script.  The \texttt{madgraph.generator} block only specifies the name of that run script.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [madgraph]
 skip = false
 params = "SleptonBino"
+paramcard = "{{madgraph['params']}}.slha"
 ecms = 13000
-cores = 1
 nevents = 50000
 seed = 0
-version = "madgraph:2.9.3"
+cores = 1
 batch = false
-paramcard = "{{madgraph['params']}}.slha"
+version = "madgraph:2.9.3"
 
 [madgraph.generator]
 output = "run.mg5"
+        \end{minted}
+	\caption{The \texttt{madgraph} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-madgraph}
+\end{listing}
 
+
+\subsection{The \texttt{madgraph.masses} block}
+\label{ssec:the-madgraph-masses-block}
+
+The \texttt{madgraph.masses} block enables the use of user-defined substitutions in the SLHA param card.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [madgraph.masses]
 MSLEP = 250
 MN1 = 240
+        \end{minted}
+	\caption{The \texttt{madgraph.masses} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-masses}
+\end{listing}
 
+In the example above, the slepton masses in the SLHA file have been replaced with the string \texttt{'MSLEP'}, which \mapyde{} then substitutes with the value of 250 GeV at run-time.  This allows a single param-card template to be used for jobs that want to keep most parameters fixed, but vary one or more parameters as part of a parameter scan.
+
+\subsection{The \texttt{madgraph.run} blocks}
+\label{ssec:the-madgraph-run-blocks}
+
+The \texttt{madgraph.run} blocks exposes the \madgraph{} run card to the \mapyde{} configuration dictionary.  The \texttt{madgraph.run} block defines the name of the \madgraph{} run card, which will be accessed via the \texttt{run\_path} defined in the \texttt{base} block.  The \texttt{madgraph.run.options} block defines modifications to be made to the \madgraph{} run card.  In the example below, default values for \texttt{mmjj}, \texttt{ptj}, and \texttt{ptj1min} are overwritten by the values provided in the \toml{} configuration file.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [madgraph.run]
 card = "default_LO.dat"
 
 [madgraph.run.options]
-mmjj = 0
-mmjjmax = -1
-deltaeta = 0
-ktdurham = -1
-xqcut = -1
+mmjj = 500
 ptj = 20
 ptj1min = 50
+        \end{minted}
+	\caption{The \texttt{madgraph.run} blocks of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-run}
+\end{listing}
 
+
+\subsection{The \texttt{madgraph.proc} block}
+\label{ssec:the-madgraph-proc-block}
+
+The \texttt{madgraph.proc} block defines the name of the process card that contains the hard process information for \madgraph.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [madgraph.proc]
 name = "isrslep"
 card = "{{madgraph['proc']['name']}}"
   \end{minted}
-	\caption{Part 1 of an example full TOML configuration file for generating slepton events.}
-	\label{slepton-config-1}
+	\caption{The \texttt{madgraph.proc} block of an example full \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-proc}
 \end{listing}
+
+\subsection{The \texttt{madspin} block}
+\label{ssec:the-madspin-block}
+
+The \texttt{madspin} block defines the name of the \madspin{} card, in jobs where \madspin{} is run.  The running of \madspin{} can be skipped if it is not needed.
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{ini}
 [madspin]
 skip = true
 card = ''
+        \end{minted}
+	\caption{The \texttt{madgraph.run} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-madpsin}
+\end{listing}
 
+\subsection{The \texttt{pythia} block}
+\label{ssec:the-pythia-block}
+
+The \texttt{pythia} block holds all configuration information for \pythia.  It defines the name of the \pythia{} configuration file, controls whether \pythia{} is run or not, and allows the passing of some additional options that will be appended to the \pythia{} configuration card.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [pythia]
 skip = false
 card = "pythia8_card.dat"
 additional_opts = ""
+        \end{minted}
+	\caption{The \texttt{pythia} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-pythia}
+\end{listing}
 
+\subsection{The \texttt{delphes} block}
+\label{ssec:the-delphes-block}
+
+The \texttt{delphes} block holds all configuration information for the \delphes{} stage.  It defines the name of the \texttt{tcl} configuration card, the name of the container that provides \delphes (\texttt{version}), and the name of the output file.  The input is assumed to be the \texttt{hepmc} output from a previous \pythia{} job.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [delphes]
 skip = false
-additional_opts = ""
 card = "delphes_card_ATLAS_lowptleptons_sleptons_notrackineffic.tcl"
 version = "delphes"
 output = "delphes/delphes.root"
+        \end{minted}
+	\caption{The \texttt{delphes} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-delphes}
+\end{listing}
 
+\subsection{The \texttt{analysis} block}
+\label{ssec:the-analysis-block}
+
+The \texttt{analysis} block defines any transform that comes after the \delphes{} stage.  In the example code below, the script \texttt{Delphes2SA.py} will transform the \ROOT{} output from \delphes{} into a \ROOT{} file that can be processed by \simpleanalysis.  This stage also allows the implementation of scale factors (\texttt{kfactor}) that are applied to the event weights from the \delphes{} output.  Scaling of the \delphes{} outputs to a total integrated luminosity is also facilitated by the \texttt{lumi} flag, and the cross section used to calculate event weights can be over-ridden with the \texttt{XSoverride} flag.  Users can also provide their own scripts to run at this stage, which can choose to implement or ignore the options in this example configuration.
+
+The code defined with the \texttt{script} flag is run within the same container as the \delphes{} stage, to allow the use of \delphes{} libraries for analyzing the output \ROOT{} file.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [analysis]
 script = "Delphes2SA.py"
 XSoverride = -1
 kfactor = 1.18
 output = "analysis/Delphes2SA.root"
 lumi = 139000
+        \end{minted}
+	\caption{The \texttt{analysis} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-analysis}
+\end{listing}
 
+\subsection{The \texttt{simpleanalysis} block}
+\label{ssec:the-simpleanalysis-block}
+
+The \texttt{simpleanalysis} block defines the inputs, outputs, and analysis code to be run in the \simpleanalysis{} stage.  The output filenames will be given the \texttt{name} of the \simpleanalysis{} algorithm (here \texttt{EwkCompressed2018}), with the \texttt{outputtag} appended in cases where multiple \simpleanalysis{} are expected.  This is particularly useful in cases where the input is specified as \texttt{hepmc}, indicating the output from \pythia{} should be analyzed, rather than the output from \delphes.  In such cases, specifying an \texttt{outputtag} like \texttt{\_hepmc} can help to distinguish between those results and the results of running \simpleanalysis{} on \delphes{} output.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [simpleanalysis]
-skip = false
-additional_opts = ""
 name = "EwkCompressed2018"
 input = ""
 outputtag = ""
+        \end{minted}
+	\caption{The \texttt{simpleanalysis} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-sa}
+\end{listing}
 
+\subsection{The \texttt{sa2json} block}
+\label{ssec:the-sa2json-block}
+
+The \texttt{sa2json} block controls the translation of the \simpleanalysis{} outputs in \ROOT{} file format to a \json{} patch file that can be used to update the probability model for statistical inference.  This stage requires an understanding of the \simpleanalysis{} output format, and how to relate that output to the names of signal regions defined in the public probability model from \hepdata.  An example is provided by the \texttt{SA2JSON.py} script in \mapyde, but each serialized probability model will need a custom translation script.  The \mapyde{} developers welcome contributions of such scripts to the \mapyde{} code base.
+
+The \texttt{image} tag controls the name of the container to be used when running the transform, while the \texttt{input} and \texttt{output} options point to the \simpleanalysis{} outputs and output \json{} filename, respectively.  The \texttt{options} entry collects command-line options for the \texttt{SA2JSON.py} script.  In this case, \texttt{-c} tells \texttt{SA2JSON.py} to perform a special selection for the compressed electroweak SUSY searches provided by the \texttt{EwkCompressed2018} \simpleanalysis{} selection.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [sa2json]
 inputs = "{{simpleanalysis['name']}}{{simpleanalysis['outputtag']}}.root"
 image = "pyplotting:latest"
 output = "{{simpleanalysis['name']}}{{simpleanalysis['outputtag']}}_patch.json"
 options = "-c"
+        \end{minted}
+	\caption{The \texttt{sa2json} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-sa2json}
+\end{listing}
 
+\subsection{The \texttt{pyhf} block}
+\label{ssec:the-pyhf-block}
+
+The \texttt{pyhf} block controls the options for running \pyhf{} on an input probability model.  The \texttt{image} flag controls the container to use for running \pyhf.  The serialized model, provided in \json{} format, is specified with the \texttt{likelihood} flag.  The \texttt{gpu-options} and \texttt{other-options} flags both pass command-line arguments to the script \texttt{muscan.py}, which performs a scan of the signal strength $\mu$.  If the container includes support for a GPU (such as the CUDA libraries provided in \texttt{pyplotting:latest-cuda11} container), and a GPU is present, then \pyhf{} will use the \texttt{jax} backend and perform the calculations in the GPU.  In the example below, the \texttt{-c} option tells \texttt{muscan.py} to not use a GPU even if it is available (and to use the CPU instead), while the \texttt{-b jax} option tells \texttt{muscan.py} to use the \texttt{jax} backend for calculations.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
 [pyhf]
 skip = false
 likelihood = "Slepton_bkgonly.json"
@@ -405,8 +538,8 @@ image = "pyplotting:latest"
 gpu-options = "-c -B jax"
 other-options = ""
   \end{minted}
-	\caption{Part 2 of an example full TOML configuration file for generating slepton events.}
-	\label{slepton-config-2}
+	\caption{The \texttt{pyhf} block of an example \toml{} configuration file for generating slepton events.}
+	\label{slepton-config-pyhf}
 \end{listing}
 
 
