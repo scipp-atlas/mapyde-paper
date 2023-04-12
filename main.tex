@@ -228,8 +228,8 @@ We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{python}
-    (SP_m_h!=-1) & (SPfh_m_h!=-1) & (MO_Omega!=-1) # spheno, feynhiggs, and micromegas ok
-    & (SI_BR_Bs_to_mumu!=-1) & (GM2_gmuon!=-1) # superiso and gm2calc ok
+    (SP_m_h!=-1) & (SPfh_m_h!=-1) & (MO_Omega!=-1) # spheno, feynhiggs, micromegas: ok
+    & (SI_BR_Bs_to_mumu!=-1) & (GM2_gmuon!=-1) # superiso, gm2calc: ok
     & (SP_m_chi_10>100) & (abs(SP_m_chi_30)<300) # N1 > 100 GeV, N3 < 300 GeV
     & ((abs(SP_m_chi_30)-abs(SP_m_chi_10))<50) # m(N3, N1) < 50 GeV
   \end{minted}
@@ -238,7 +238,7 @@ We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M
 \end{listing}
 
 
-The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in terms of the mass of the \chitz{} and the mass difference $\Delta m=m(\chitz)-m(\chioz)$, to facilitate comparisons with the pure-Higgsino constraints from ATLAS.  The models under study are binned in a course grid in the $\Delta m$ vs $m(\chitz)$ plane, and the fraction of excluded models is calculated for each bin.  The expected and observed constraints on these models are shown in~\Cref{fig:EWKino_pmssm}, with the ATLAS Higgsino results overlaid for comparison.  In general the selected pMSSM points are more constrained than those of a pure-Higgsino model at larger mass splittings, likely due to the presence of the additional \chithz{} and its own decays to final states similar to that of the \chitz.
+The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in terms of the mass of the \chitz{} and the mass difference $\Delta m=m(\chitz)-m(\chioz)$, to facilitate comparisons with the pure-Higgsino constraints from ATLAS.  The models under study are binned in a coarse grid in the $\Delta m$ vs $m(\chitz)$ plane, and the fraction of excluded models is calculated for each bin.  The expected and observed constraints on these models are shown in~\Cref{fig:EWKino_pmssm}, with the ATLAS Higgsino results overlaid for comparison.  In general the selected pMSSM points are more constrained than those of a pure-Higgsino model at larger mass splittings, likely due to the presence of the additional \chithz{} and its own decays to final states similar to that of the \chitz.
 
 \begin{figure}
 	\centering
@@ -251,7 +251,7 @@ The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in 
 \section{Conclusion}
 \label{sec:conclusion}
 
-The combination of rich physics results from the LHC with public supplementary material, including analysis routines and probability models, has opened the door to new ways of constraining unexplored models of BSM physics with already-published results.  We demonstrated one such pipeline, implemented in the \mapyde{} python package, that facilitates the re-use of LHC analyses.  We illustrated the utility of \mapyde{} by probing previously-untested models of supersymmetry, including a simplified model of sleptons that undergo cascade decays to wino-like and bino-like electroweakinos, and a parameter scan of highly-mixed higgsino, wino, and bino states with a rich set of possible decay chains.  In both cases we find that existing searches are able to constrain non-trivial regions of parameter space that would have been difficult or impossible to predict by simple extrapolations of existing results.
+The combination of rich physics results from the LHC with public supplementary material, including analysis routines and probability models, has opened the door to new ways of constraining unexplored models of BSM physics with already-published results.  We demonstrated one such pipeline, implemented in the \mapyde{} python package, that facilitates the re-use of LHC analyses.  We illustrated the utility of a user-friendly python package, \mapyde{}, by probing previously-untested models of supersymmetry, including a simplified model of sleptons that undergo cascade decays to wino-like and bino-like electroweakinos, and a parameter scan of highly-mixed higgsino, wino, and bino states with a rich set of possible decay chains.  In both cases we find that existing searches are able to constrain non-trivial regions of parameter space that would have been difficult or impossible to predict by simple extrapolations of existing results.
 
 \printbibliography
 
