@@ -257,6 +257,8 @@ The combination of rich physics results from the LHC with public supplementary m
 
 \appendix
 
+\newpage
+
 \section{EasyScan\_HEP Configuration}
 \label{sec:easyscan-hep-configuration}
 
@@ -384,7 +386,7 @@ MN1 = 240
 	\label{slepton-config-masses}
 \end{listing}
 
-In the example above, the slepton masses in the SLHA file have been replaced with the string \texttt{'MSLEP'}, which \mapyde{} then substitutes with the value of 250 GeV at run-time.  This allows a single param-card template to be used for jobs that want to keep most parameters fixed, but vary one or more parameters as part of a parameter scan.
+In the example above, the slepton masses in the SLHA file have been replaced with the string \texttt{'{{MSLEP}}'}, which \mapyde{} then substitutes with the value of 250 GeV at run-time.  This allows a single param-card template to be used for jobs that want to keep most parameters fixed, but vary one or more parameters as part of a parameter scan.
 
 \subsection{The \texttt{madgraph.run} blocks}
 \label{ssec:the-madgraph-run-blocks}
