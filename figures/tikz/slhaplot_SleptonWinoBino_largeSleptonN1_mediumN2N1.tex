@@ -9,34 +9,34 @@
 \begin{document}
 \centering
 \begin{tikzpicture}[scale=0.6]
-  % y-scalefactor (GeV -> coords) = 5.133333e-02
+	% y-scalefactor (GeV -> coords) = 5.133333e-02
 
-  %% Frame
-  \draw (0.000000,0.000000) rectangle (4.000000,15.400000);
-  %% y-ticks
-  \draw (0.0, 0.0) node[left] {0};
-  \draw (0.0, 5.1) node[left] {50};
-  \draw (0.3, 5.1) -- (0.0, 5.1);
-  \draw (0.0, 10.3) node[left] {100};
-  \draw (0.3, 10.3) -- (0.0, 10.3);
-  \draw (0.0, 15.4) node[left] {150};
-  \draw (-2.2,15.4) node[left,rotate=90] {Mass / GeV};
+	%% Frame
+	\draw (0.000000,0.000000) rectangle (4.000000,15.400000);
+	%% y-ticks
+	\draw (0.0, 0.0) node[left] {0};
+	\draw (0.0, 5.1) node[left] {50};
+	\draw (0.3, 5.1) -- (0.0, 5.1);
+	\draw (0.0, 10.3) node[left] {100};
+	\draw (0.3, 10.3) -- (0.0, 10.3);
+	\draw (0.0, 15.4) node[left] {150};
+	\draw (-2.2,15.4) node[left,rotate=90] {Mass / GeV};
 
-  %% Particle lines
-  % pid1000011
-  \draw[color=blue,thick] (1.2, 13.255179) -- (3.2, 13.255179);
-  % pid1000022
-  \draw[color=blue,thick] (1.2, 7.738891) -- (3.2, 7.738891);
-  % pid1000023
-  \draw[color=blue,thick] (0.9, 10.209912) -- (2.9, 10.209912);
-  % pid1000024
-  %\draw[color=red,thick] (0.2, 9.393803) -- (2.2, 9.393803);
+	%% Particle lines
+	% pid1000011
+	\draw[color=blue,thick] (1.2, 13.255179) -- (3.2, 13.255179);
+	% pid1000022
+	\draw[color=blue,thick] (1.2, 7.738891) -- (3.2, 7.738891);
+	% pid1000023
+	\draw[color=blue,thick] (0.9, 10.209912) -- (2.9, 10.209912);
+	% pid1000024
+	%\draw[color=red,thick] (0.2, 9.393803) -- (2.2, 9.393803);
 
-  %% Particle labels
-  \draw (1.2, 13.407965) node[left] {\small $\tilde{\ell}_\text{L}$};
-  \draw (1.2, 7.738891) node[left] {\small $\tilde{\chi}_1^0$};
-  \draw (2.9, 10.209912) node[right] {\small $\tilde{\chi}_2^0$};
-  %\draw (2.2,9.393803) node[right] {\small $\tilde{\chi}_1^\pm$};
+	%% Particle labels
+	\draw (1.2, 13.407965) node[left] {\small $\tilde{\ell}_\text{L}$};
+	\draw (1.2, 7.738891) node[left] {\small $\tilde{\chi}_1^0$};
+	\draw (2.9, 10.209912) node[right] {\small $\tilde{\chi}_2^0$};
+	%\draw (2.2,9.393803) node[right] {\small $\tilde{\chi}_1^\pm$};
 \end{tikzpicture}
 
 \end{document}
