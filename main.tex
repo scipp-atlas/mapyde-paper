@@ -182,7 +182,7 @@ After the acceptance corrections described above, the lepton efficiencies in \de
 	\label{fig:SleptonBino}
 \end{figure}
 
-With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays with 100\% branching ratio to a wino-like \chitz{} NLSP and a SM charged lepton, with the \chitz{} decaying to a \chioz{} and two soft fermions, as illustrated in~\Cref{fig:feynman:slepton_wino_bino}. In order to reconstruct a lepton to be selected by the analysis, the slepton can decay either through a $\chitz$ or $\chiopm$ as illustrated in~\Cref{fig:feynman:slepton_decays}.  We find that the low branching ratio of the intermediate $W^\pm$ to leptons significantly reduces the contributions from events with \chiopm-mediated decays, leaving the decays through \chitz{} most relevant for the reinterpretation.  In such events, the \pt{} values of the SM leptons will be largely determined by the slepton-\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the slepton-\chioz{} mass gap.
+With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays with 100\% branching ratio to a wino-like \chitz{} NLSP and a SM charged lepton, with the \chitz{} decaying to a \chioz{} and two soft fermions, as illustrated in~\Cref{fig:feynman:slepton_wino_bino}. In order to reconstruct a lepton to be selected by the analysis, the slepton can decay either through a $\chitz$ or $\chiopm$ as illustrated in~\Cref{fig:feynman:slepton_decays}.  We find that the low branching ratio of the intermediate $W^\pm$ to leptons significantly reduces the contributions from events with \chiopm-mediated decays, leaving the decays through \chitz{} most relevant for the reinterpretation.  In such events, the \pt{} values of the SM leptons will be largely determined by the \slepton-\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the \slepton-\chioz{} mass gap.
 
 \begin{figure}
 	\centering
@@ -192,14 +192,22 @@ With the framework tuned to the ATLAS response for compressed SUSY events, we no
 	\label{fig:feynman:slepton_decays}
 \end{figure}
 
-We parameterize the model in terms of the slepton mass, the slepton-\chioz{} mass gap, and the \chitz-\chioz{} mass gap, to allow us to display the model constraints in the same plane as the slepton-bino results from ATLAS.  The resulting constraints (both expected and observed) are shown in~\Cref{fig:SleptonWinoBino} for a range of \chitz-\chioz{} splittings.  At small splittings the results resemble those of the slepton-bino model, since the \chitz{} is nearly degenerate with the \chioz{} leading to virtually no kinematic difference arising from the additional soft decay products.  By contrast, for large \chitz-\chioz{} splittings (dark blue trends), the requirement that the slepton must decay through a \chitz{} results stronger constraints at large slepton-\chioz{} differences.  Constraints on such models cover a smaller range in slepton masses due to smaller mass differences between the slepton and the \chitz, which leads to softer SM leptons and lower lepton efficiencies.
+We parameterize the model in terms of the slepton mass, the \slepton-\chioz{} mass gap, and the \chitz-\chioz{} mass gap, to allow us to display the model constraints in the same plane as the slepton-bino results from ATLAS.  The resulting constraints (both expected and observed) are shown in~\Cref{fig:SleptonWinoBino,fig:SleptonWinoBinoLog} for a range of \chitz-\chioz{} splittings.  At small $\Delta m(\chitz,\chioz)$ the results resemble those of the ATLAS slepton-bino model, since the \chitz{} is nearly degenerate with the \chioz{} leading to virtually no kinematic difference arising from the additional soft decay products.  By contrast, for large \chitz-\chioz{} splittings (dark blue trends), the requirement that the slepton must decay through a \chitz{} results stronger constraints at large \slepton-\chioz{} differences.  For each model considered, the lower edge is constrained by small $\Delta m(\slepton,\chitz)$ which leads to softer SM leptons and lower lepton efficiences. The upper edge is constrained by the reduced cross-section due to larger slepton mass and the analysis selections vetoing the fermion pair ($f\bar{f}$).
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp}}
+	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs}}
+	\caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
+	\label{fig:SleptonWinoBino}
+\end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp_log}}
 	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs_log}}
-	\caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
-	\label{fig:SleptonWinoBino}
+	\caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model in log-scale.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
+	\label{fig:SleptonWinoBinoLog}
 \end{figure}
 
 This class of models, while being less \enquote{simplified} than the slepton-bino model traditionally studied by LHC experiments, includes models that nominally escape constraint by both existing slepton-bino searches as well as direct searches for electroweakinos.  In particular, the wino-bino constraints reported in Ref.~\cite{ATLAS:2019lng} constrain electroweakinos with \chitz-\chioz{} splittings as low as 1 GeV only for electroweakino masses near 100 GeV, while in the slepton-wino-bino model we can exclude models with 1 GeV \chitz-\chioz{} splittings up to \chioz{} masses of over 200 GeV.
