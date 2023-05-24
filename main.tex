@@ -167,7 +167,7 @@ The final difference between the ATLAS simulation framework and \mapyde{} is eva
 \subsection{Compressed Sleptons}
 \label{ssec:compressed-sleptons}
 
-We first reproduce the results of the ATLAS search for compressed sleptons.  The ATLAS search is optimized using a slepton-bino model, where the slepton NLSP decays to a bino-like LSP and a charged SM lepton.  We compare the leading-order (LO) cross sections calculated by \madgraph{} in an inclusive sample (without additional emissions) with the next-to-leading-order (NLO) cross sections reported by ATLAS and find a mass-independent NLO:LO $k$-factor of 1.18, which is used to scale the one-jet \madgraph{} samples produced with \mapyde.
+We first reproduce the results of the ATLAS search for compressed sleptons.  The ATLAS search is optimized using a slepton-bino model, in which the slepton NLSP decays to a bino-like LSP and a charged SM lepton.  We generate events with pairs of charged sleptons (including scalar superpartners of both left- and right-handed SM leptons) and compare the leading-order (LO) cross sections calculated by \madgraph{} in an inclusive sample (without additional emissions) with the next-to-leading-order (NLO) cross sections reported by ATLAS.  We find a mass-independent NLO:LO $k$-factor of 1.18, which is used to scale the one-jet \madgraph{} samples produced with \mapyde.
 
 After the acceptance corrections described above, the lepton efficiencies in \delphes{} are tuned to reproduce the ATLAS signal yields.  The efficiencies of electrons and muons after object selection are provided as part of the public record for Ref.~\cite{ATLAS:2019lng} and are the starting point for the modified \delphes{} configuration used to reproduce the ATLAS results.  We find that setting all electron and muon efficiencies in \delphes{} to the upper range of values reported in Fig. 3 of~\cite{ATLAS:2019lng} is sufficient to reproduce the results of the ATLAS slepton and electroweakino searches to adequate precision, as shown in~\Cref{fig:SleptonBino,fig:Higgsino}.  The only exception is the lowest-\pt{} bin for both electrons and muons, where the \mapyde{} efficiencies needed to reproduce the ATLAS limits are roughly 15\% higher than the values reported by ATLAS. \Cref{fig:SleptonBino} also shows the model constraints for the slepton-bino search when using the default \delphes{} configuration card, which does a reasonable job of describing the high-splitting regions, but fails to describe the most compressed mass points, which are most sensitive to the low-\pt{} lepton efficiencies provided by ATLAS.
 
@@ -366,9 +366,9 @@ The \texttt{madgraph} block defines some top-level options for running madgraph,
 \begin{itemize}
 	\item whether or not to skip the \madgraph{} job, sometimes useful when re-running an analysis chain and re-using LHE inputs from a previous job
 	\item the name of the \texttt{param} card to use, in this example making use of a \toml{} feature that allows references to other \toml{} parameters
-	\item Some commonly-changed run parameters like \texttt{nevents}, \texttt{seed}, and \texttt{ecms}
+	\item some commonly-changed run parameters like \texttt{nevents}, \texttt{seed}, and \texttt{ecms}
 	\item the number of jobs to run in parallel when generating \madgraph{} events and when processing those events in \pythia
-	\item The name of the container that provides the version of \madgraph{} to use, in this case version 2.9.3 (taken from the \texttt{github} container registry)
+	\item the name of the container that provides the version of \madgraph{} to use, in this case version 2.9.3 (taken from the \texttt{github} container registry)
 \end{itemize}
 
 
