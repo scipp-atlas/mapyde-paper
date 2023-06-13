@@ -182,7 +182,9 @@ After the acceptance corrections described above, the lepton efficiencies in \de
 	\label{fig:SleptonBino}
 \end{figure}
 
-With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays to a wino and a SM charged lepton, as illustrated in~\Cref{fig:feynman:slepton_wino_bino}. In order to produce a lepton to be selected by the analysis, the slepton can decay either through a neutralino ($\chitz$) or chargino ($\chiopm$) as illustrated in~\Cref{fig:feynman:slepton_decays}.  We find that the low branching ratio of the intermediate $W^\pm$ to leptons significantly reduces the contributions from events with \chiopm-mediated decays, leaving the decays through \chitz{} most relevant for the reinterpretation.  In such events, the \pt{} values of the SM leptons will be largely determined by the \slepton--\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the \slepton--\chioz{} mass gap.  In the limit of vanishing \chitz--\chioz{} mass differences, the slepton-wino-bino model described here is phenomenologically identical to the slepton-bino model.
+With the framework tuned to the ATLAS response for compressed SUSY events, we now use \mapyde{} to assess the sensitivity of the ATLAS search to a new model.  We consider a \enquote{slepton-wino-bino} simplified model, where a light slepton decays to a wino and a SM charged lepton, as illustrated in~\Cref{fig:feynman:slepton_wino_bino}.
+%In order to produce a lepton to be selected by the analysis, the slepton can decay either through a neutralino ($\chitz$) or chargino ($\chiopm$) as illustrated in~\Cref{fig:feynman:slepton_decays}.  We find that the low branching ratio of the intermediate $W^\pm$ to leptons significantly reduces the contributions from events with \chiopm-mediated decays, leaving the decays through \chitz{} most relevant for the reinterpretation.
+We set the slepton branching ratio $\tilde{\ell}\to\ell\chitz$ to 100\%, with the \chitz{} decaying to a \chioz{} and to two fermions through an off-shell $Z$ boson.  In such events, the \pt{} values of the SM leptons will be largely determined by the \slepton--\chitz{} mass gap, in contrast to the slepton-bino model where the lepton \pt{} is driven by the \slepton--\chioz{} mass gap.  In the limit of vanishing \chitz--\chioz{} mass differences, the slepton-wino-bino model described here is phenomenologically identical to the slepton-bino model.
 
 \begin{figure}
 	\centering
@@ -191,13 +193,13 @@ With the framework tuned to the ATLAS response for compressed SUSY events, we no
 	\label{fig:feynman:slepton_wino_bino}
 \end{figure}
 
-\begin{figure}
-	\centering
-	\subfloat[neutralino-mediated]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/slepton_decay_ch20}}}\hspace{2cm}
-	\subfloat[chargino-mediated]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/slepton_decay_ch1pm}}}
-	\caption{Feynman diagrams of possible slepton decays via either (a) $\chitz$ or (b) $\chiopm$.}
-	\label{fig:feynman:slepton_decays}
-\end{figure}
+%% \begin{figure}
+%% 	\centering
+%% 	\subfloat[neutralino-mediated]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/slepton_decay_ch20}}}\hspace{2cm}
+%% 	\subfloat[chargino-mediated]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/slepton_decay_ch1pm}}}
+%% 	\caption{Feynman diagrams of possible slepton decays via either (a) $\chitz$ or (b) $\chiopm$.}
+%% 	\label{fig:feynman:slepton_decays}
+%% \end{figure}
 
 \begin{figure}
 	\centering
@@ -231,7 +233,7 @@ This class of models, while being less \enquote{simplified} than the slepton-bin
 \subsection{Compressed Electroweakinos}
 \label{ssec:compressed-electroweakinos}
 
-The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz{} states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the Higgsino results.  The \mapyde{} electroweakino samples use the same $k$-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in~\Cref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS over most of the model space.
+The ATLAS search for compressed electroweakinos considered two different simplified models: one with \enquote{pure} Higgsino-like \chitz, \chiopm, and \chioz{} states, and another with wino-like \chitz/\chiopm{} and bino-like \chioz.  We focus on the Higgsino model to validate the \mapyde{} output.  Following a procedure similar to the validation of the ATLAS slepton-bino results described above, we generate a grid of Higgsino model points to reproduce the ATLAS results.  The \mapyde{} electroweakino samples use the same $k$-factor and lepton efficiencies as the slepton search.  The comparison between the \mapyde{} and ATLAS results is shown in~\Cref{fig:Higgsino}, where the \mapyde{} exclusion contour provides somewhat more coverage than the corresponding ATLAS contour, in contrast to the slepton-bino validation where the \mapyde{} results were slightly weaker than ATLAS over most of the model space.
 
 \begin{figure}
 	\centering
@@ -248,18 +250,20 @@ The ATLAS search for compressed electroweakinos considered two different simplif
 	\label{fig:feynman:ewkinos}
 \end{figure}
 
-We next use \mapyde{} to assess the ATLAS sensitivity to SUSY models in which $M_1$, $M_2$, and $\mu$ are all relatively low, leading to \enquote{wino-bino-higgsino} models that have potentially rich phenomenologies. Some example models are illustrated in~\Cref{fig:feynman:ewkinos}. We use a pMSSM scanning tool (\easyscanhep~\cite{Shang:2023gfy,Han:2016gvr}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from $-500$ GeV to 500 GeV, sampled with flat priors, defined in~\Cref{lst:easyscanini}.  Particle masses are calculated using \spheno~\cite{Porod:2003um,Porod:2011nf} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  Additional tools are run as described in~\Cref{sec:easyscan-hep-configuration}.  From this sample we select (\Cref{lst:mask}) 81 models satisfying $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  The SLHA records for these models are used as inputs for event generation with \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output.
+We next use \mapyde{} to assess the ATLAS sensitivity to MSSM SUSY models in which the bino, wino, and Higgsino mass terms ($M_1$, $M_2$, and $\mu$, respectively) are all relatively low, leading to \enquote{wino-bino-Higgsino} models that have potentially rich phenomenologies. Some example models are illustrated in~\Cref{fig:feynman:ewkinos}. We use a pMSSM scanning tool (\easyscanhep~\cite{Shang:2023gfy,Han:2016gvr}) to generate particle spectra for models with $M_1$, $M_2$, and $\mu$ ranging from $-500$ GeV to 500 GeV, sampled with flat priors.%, defined in~\Cref{lst:easyscanini}.
+Particle masses are calculated using \spheno~\cite{Porod:2003um,Porod:2011nf} and stored in the SUSY Les Houches Accord (SLHA) format~\cite{Allanach:2008qq}.  Additional tools are run as described in~\Cref{sec:easyscan-hep-configuration} and are used to calculate values for the selection criteria shown in Listing A.  Since our goal is to investigate models with compressed electroweakino mass spectra accessible to ATLAS Run-2 searches, we select %(\Cref{lst:mask})
+models that satisfy $m(\chioz) > 100$ GeV, $m(\chithz)<300$ GeV, and $(m(\chithz)-m(\chioz))<50$ GeV for further study.  We further require that any selected models have valid output from the spectrum generator \spheno~\cite{Porod:2003um,Porod:2011nf}, have a valid Higgs mass as computed by \feynhiggs~\cite{Bahl:2018qog,Bahl:2017aev,Bahl:2016brp,Hahn:2013ria,Frank:2006yh,Degrassi:2002fi,Heinemeyer:1998np,Heinemeyer:1998yj}, and to satisfy dark matter constraints implemented in \micromegas~\cite{Belanger:2020gnr}, flavor physics constraints implemented in \superiso~\cite{Arbey:2018msw}, and muon $g-2$ constraints implemented in \gmtwocalc~\cite{Athron:2015rva,Athron:2021evk}.  The SLHA records for the selected 81 models are used as inputs for event generation with \mapyde.  Branching ratios for electroweakino decays are taken directly from the \spheno{} output.
 
-\begin{listing}[H]
-	\begin{minted}[frame=single,framesep=2mm]{python}
-    (SP_m_h!=-1) & (SPfh_m_h!=-1) & (MO_Omega!=-1) # spheno, feynhiggs, micromegas: ok
-    & (SI_BR_Bs_to_mumu!=-1) & (GM2_gmuon!=-1) # superiso, gm2calc: ok
-    & (SP_m_chi_10>100) & (abs(SP_m_chi_30)<300) # N1 > 100 GeV, N3 < 300 GeV
-    & ((abs(SP_m_chi_30)-abs(SP_m_chi_10))<50) # m(N3, N1) < 50 GeV
-  \end{minted}
-	\caption{The mask used to define the selection of models for assessing the ATLAS sensitivity to Higgsino-Wino models.}
-	\label{lst:mask}
-\end{listing}
+%% \begin{listing}[H]
+%% 	\begin{minted}[frame=single,framesep=2mm]{python}
+%%     (SP_m_h!=-1) & (SPfh_m_h!=-1) & (MO_Omega!=-1) # spheno, feynhiggs, micromegas: ok
+%%     & (SI_BR_Bs_to_mumu!=-1) & (GM2_gmuon!=-1) # superiso, gm2calc: ok
+%%     & (SP_m_chi_10>100) & (abs(SP_m_chi_30)<300) # N1 > 100 GeV, N3 < 300 GeV
+%%     & ((abs(SP_m_chi_30)-abs(SP_m_chi_10))<50) # m(N3, N1) < 50 GeV
+%%   \end{minted}
+%% 	\caption{The mask used to define the selection of models for assessing the ATLAS sensitivity to Higgsino-Wino models.}
+%% 	\label{lst:mask}
+%% \end{listing}
 
 
 The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in terms of the mass of the \chitz{} and the mass difference $\Delta m=m(\chitz)-m(\chioz)$, to facilitate comparisons with the pure-Higgsino constraints from ATLAS.  The models under study are binned in a coarse grid in the $\Delta m$ vs $m(\chitz)$ plane, and the fraction of excluded models is calculated for each bin.  The expected and observed constraints on these models are shown in~\Cref{fig:EWKino_pmssm}, with the ATLAS Higgsino results overlaid for comparison.  In general the selected pMSSM points are more constrained than those of a pure-Higgsino model at larger mass splittings, likely due to the presence of the additional \chithz{} and its own decays to final states similar to that of the \chitz.
@@ -308,7 +312,7 @@ We used an \easyscanhep \texttt{ini} configuration file that defined the scan ra
 Scan method:       random
 #                  ID     Prior  Min    MAX
 Input parametes:   tanb,  Flat,  1,     60
-                   M_1,   Flat,  2000,  2000
+                   M_1,   Flat,  -500,  500
                    M_2,   Flat,  -500,  500
                    M_3,   Flat,  2000,  2000
                    AT,    Flat,  2000,  2000
