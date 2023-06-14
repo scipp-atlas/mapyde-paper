@@ -366,6 +366,8 @@ likelihoods_path = "{{MAPYDE_LIKELIHOODS}}"
 	\label{slepton-config-base}
 \end{listing}
 
+Note that in~\Cref{slepton-config-base}, the \texttt{template} is left undefined, which means that the base template shipped with \mapyde{} will be loaded in. This behavior can be disabled by setting \texttt{template = false}. The (nested) template inheriting behavior for \toml{} configuration parsing enables defining grid scans more cleanly with less duplicated code.
+
 \subsection{The \texttt{madgraph} block}
 \label{ssec:the-madgraph-block}
 
@@ -374,7 +376,6 @@ The \texttt{madgraph} block defines some top-level options for running madgraph,
 \begin{itemize}
 	\item whether or not to skip the \madgraph{} job, sometimes useful when re-running an analysis chain and re-using LHE inputs from a previous job
 	\item the name of the \texttt{param} card to use, in this example making use of a \toml{} feature that allows references to other \toml{} parameters
-	\item some commonly-changed run parameters: \texttt{nevents}, \texttt{iseed}, and \texttt{ecms}
 	\item the number of jobs to run in parallel when generating \madgraph{} events and when processing those events in \pythia
 	\item the name of the container that provides the version of \madgraph{} to use, in this case version 2.9.3 (taken from the \texttt{github} container registry)
 \end{itemize}
@@ -389,9 +390,6 @@ These options, and options from subsequent \madgraph-related blocks, are process
 skip = false
 params = "SleptonBino"
 paramcard = "{{madgraph['params']}}.slha"
-ecms = 13000
-nevents = 50000
-seed = 0
 cores = 1
 batch = false
 version = "madgraph:2.9.3"
@@ -424,12 +422,15 @@ In the example above, the slepton masses in the SLHA file have been replaced wit
 \subsection{The \texttt{madgraph.run} blocks}
 \label{ssec:the-madgraph-run-blocks}
 
-The \texttt{madgraph.run} blocks exposes the \madgraph{} run card to the \mapyde{} configuration dictionary.  The \texttt{madgraph.run} block defines the name of the \madgraph{} run card, which will be accessed via the \texttt{run\_path} defined in the \texttt{base} block.  The \texttt{madgraph.run.options} block defines modifications to be made to the \madgraph{} run card.  In the example below, default values for \texttt{mmjj}, \texttt{ptj}, and \texttt{ptj1min} are overwritten by the values provided in the \toml{} configuration file.
+The \texttt{madgraph.run} blocks exposes the \madgraph{} run card to the \mapyde{} configuration dictionary.  The \texttt{madgraph.run} block defines the name of the \madgraph{} run card, which will be accessed via the \texttt{run\_path} defined in the \texttt{base} block as well as some commonly-changed run parameters: \texttt{nevents}, \texttt{iseed}, and \texttt{ecms}.  The \texttt{madgraph.run.options} block defines modifications to be made to the \madgraph{} run card.  In the example below, default values for \texttt{mmjj}, \texttt{ptj}, and \texttt{ptj1min} are overwritten by the values provided in the \toml{} configuration file.
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{ini}
 [madgraph.run]
 card = "default_LO.dat"
+ecms = 13000
+nevents = 50000
+seed = 0
 
 [madgraph.run.options]
 mmjj = 500
@@ -444,16 +445,34 @@ ptj1min = 50
 \subsection{The \texttt{madgraph.proc} block}
 \label{ssec:the-madgraph-proc-block}
 
-The \texttt{madgraph.proc} block defines the name of the process card that contains the hard process information for \madgraph.
+The \texttt{madgraph.proc} block defines the name of the process card that contains the hard process information for \madgraph. \Cref{slepton-config-proc} shows an example using an existing process card, while ~\Cref{slepton-config-proc-contents} creates a new one from the specified \texttt{contents}.
 
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{ini}
 [madgraph.proc]
 name = "isrslep"
 card = "{{madgraph['proc']['name']}}"
+contents = false
   \end{minted}
 	\caption{The \texttt{madgraph.proc} block of an example full \toml{} configuration file for generating slepton events.}
 	\label{slepton-config-proc}
+\end{listing}
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{ini}
+[madgraph.proc]
+name = "isrslep"
+card = false
+contents = """\
+set ...
+define susystrong ...
+define ...
+generate p p > chsleptons chsleptons j / susystrong @1
+output -f
+"""
+  \end{minted}
+	\caption{The \texttt{madgraph.proc} block demonstrating how to create a process card on-the-fly using \texttt{contents} to generate slepton events.}
+	\label{slepton-config-proc-contents}
 \end{listing}
 
 \subsection{The \texttt{madspin} block}
@@ -567,6 +586,7 @@ The \texttt{pyhf} block controls the options for running \pyhf{} on an input pro
 \begin{listing}[H]
 	\begin{minted}[frame=single,framesep=2mm]{ini}
 [pyhf]
+script = "muscan.py"
 skip = false
 likelihood = "Slepton_bkgonly.json"
 image = "pyplotting:latest"
@@ -576,6 +596,5 @@ other-options = ""
 	\caption{The \texttt{pyhf} block of an example \toml{} configuration file for generating slepton events.}
 	\label{slepton-config-pyhf}
 \end{listing}
-
 
 \end{document}
