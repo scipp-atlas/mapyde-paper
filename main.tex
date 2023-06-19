@@ -117,6 +117,13 @@ In this paper we present a new pipeline for calculating the constraints on new p
 \section{The \mapyde{} toolkit}
 \label{sec:the-toolkit}
 
+\begin{figure}[tbp]
+	\centering
+	\includegraphics[width=\columnwidth]{figures/tikz/output/overview}
+	\caption{Overview of the \mapyde{} toolchain and the role of each component.}
+	\label{fig:mapydeoverview}
+\end{figure}
+
 This paper describes the implementation of, and results obtained with, version \texttt{v0.5.0} of \mapyde.  The \mapyde{} package provides support for using the following tools:
 
 \begin{itemize}
@@ -128,13 +135,6 @@ This paper describes the implementation of, and results obtained with, version \
 \end{itemize}
 
 and was named after the first three tools in a typical \mapyde{} simulation pipeline: \madgraph, \pythia, and \delphes{} (\textsc{MaPyDe}).  Additional tools, such as those listed in \Cref{sec:introduction}, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and they can be more natively supported in future versions of \mapyde{} upon request or by pull requests from external contributors.  A flow chart illustrating the role of different tools in the \mapyde{} pipeline is shown in~\Cref{fig:mapydeoverview}.
-
-\begin{figure}[tbp]
-	\centering
-	\includegraphics[width=\columnwidth]{figures/tikz/output/overview}
-	\caption{Overview of the \mapyde{} toolchain and the role of each component.}
-	\label{fig:mapydeoverview}
-\end{figure}
 
 A \mapyde{} pipeline is constructed as a series of containerized transforms, with the \mapyde{} package providing configuration and steering of the individual stages.  The use of containers allows the \mapyde{} package to remain lightweight and easy to install, while still enabling event generation/simulation and subsequent data analysis steps to run on any system that provides \docker{} or \singularity/\apptainer.  Default containers are provided for \madgraph+\pythia, for \delphes, and for probability model fitting with \pyhf.  The ATLAS collaboration provides containers that implement the \simpleanalysis{} routines for many SUSY searches, including those reinterpreted in \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas}.  Containers for a variety of different \madgraph+\pythia{} releases are provided in the \mapyde{} \texttt{github} container registry~\cite{MapydeRegistry}.  Users can also provide their own containers for any stage of the analysis.
 
@@ -165,9 +165,9 @@ We first reproduce the results of the ATLAS search for compressed sleptons.  The
 
 After the acceptance corrections described above, the lepton efficiencies in \delphes{} are tuned to reproduce the ATLAS signal yields.  The efficiencies of electrons and muons after object selection are provided as part of the public record for Ref.~\cite{ATLAS:2019lng} and are the starting point for the modified \delphes{} configuration used to reproduce the ATLAS results.  We find that setting all electron and muon efficiencies in \delphes{} to the upper range of values reported in Fig. 3 of~\cite{ATLAS:2019lng} is sufficient to reproduce the results of the ATLAS slepton and electroweakino searches to adequate precision, as shown in~\Cref{fig:SleptonBino,fig:Higgsino}.  The only exception is the lowest-\pt{} bin for both electrons and muons, where the \mapyde{} efficiencies needed to reproduce the ATLAS limits are roughly 15\% higher than the values reported by ATLAS. \Cref{fig:SleptonBino} also shows the model constraints for the slepton-bino search when using the default \delphes{} configuration card, which does a reasonable job of describing the high-splitting regions, but fails to describe the most compressed mass points, which are most sensitive to the low-\pt{} lepton efficiencies provided by ATLAS.
 
-\begin{figure}
+\begin{figure}[thbp]
 	\centering
-	\includegraphics[width=0.5\textwidth]{{./figures/SleptonBino}}
+	\includegraphics[width=0.75\textwidth]{{./figures/SleptonBino}}
 	\caption{Constraints on the slepton-bino model from: the ATLAS paper~\cite{ATLAS:2019lng} (blue dots); \mapyde{} before tuning the \delphes{} lepton efficiencies (orange solid line); and \mapyde{} after tuning (blue solid line).}
 	\label{fig:SleptonBino}
 \end{figure}
@@ -195,17 +195,17 @@ We parameterize the model in terms of the slepton mass, the \slepton-\chioz{} ma
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp}}
-	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs}}
-	\caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
+	\subfloat[expected]{\includegraphics[width=0.75\textwidth]{{./figures/SleptonWinoBino_exp}}}\\
+	\subfloat[observed]{\includegraphics[width=0.75\textwidth]{{./figures/SleptonWinoBino_obs}}}
+	\caption{Expected (a) and observed (b) constraints on the slepton-wino-bino model.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
 	\label{fig:SleptonWinoBino}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_exp_log}}
-	\includegraphics[width=0.48\textwidth]{{./figures/SleptonWinoBino_obs_log}}
-	\caption{Expected (left) and observed (right) constraints on the slepton-wino-bino model, shown in logarithmic scale.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
+	\subfloat[expected]{\includegraphics[width=0.75\textwidth]{{./figures/SleptonWinoBino_exp_log}}}\\
+	\subfloat[observed]{\includegraphics[width=0.75\textwidth]{{./figures/SleptonWinoBino_obs_log}}}
+	\caption{Expected (a) and observed (b) constraints on the slepton-wino-bino model, shown in logarithmic scale.  The model is parameterized by the slepton mass, the slepton-\chioz{} mass splitting, and the \chitz-\chioz{} splitting, and compared against the slepton-bino results from Ref.~\cite{ATLAS:2019lng}.}
 	\label{fig:SleptonWinoBinoLog}
 \end{figure}
 
@@ -218,15 +218,15 @@ The ATLAS search for compressed electroweakinos considered two different simplif
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{{./figures/Higgsino}}
+	\includegraphics[width=0.75\textwidth]{{./figures/Higgsino}}
 	\caption{Constraints on the \enquote{pure Higgsino} simplified model from ATLAS (blue dots) and \mapyde{} (purple solid line).}
 	\label{fig:Higgsino}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\subfloat[one-step]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/ewkino_onestep}}}\hspace{2cm}
-	\subfloat[two-step]{\includegraphics[width=0.3\textwidth]{{./figures/feynman/output/ewkino_twostep}}}
+	\subfloat[one-step]{\includegraphics[width=0.4\textwidth]{{./figures/feynman/output/ewkino_onestep}}}\hspace{2cm}
+	\subfloat[two-step]{\includegraphics[width=0.4\textwidth]{{./figures/feynman/output/ewkino_twostep}}}
 	\caption{Example feynman diagrams of possible electroweakino decays with (a) $\chitpm\to\chioz$ and (b) $\chitpm\to\chitz$.  The $W$-boson comes from $\chitpm$ in both cases.}
 	\label{fig:feynman:ewkinos}
 \end{figure}
@@ -238,9 +238,9 @@ The ATLAS constraints on the wino-bino-higgsino model scan are parameterized in 
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_exp}}
-	\includegraphics[width=0.48\textwidth]{{./figures/EWKino_pmssm_obs}}
-	\caption{Expected (left) and observed (right) constraints on wino-bino-higgsino models containing three light neutralinos.  Black dots represent the specific model points used to calculate the fraction of excluded models within a bin, shown in color.  White bins contain no models from the current scan.  Results from an ATLAS search~\cite{ATLAS:2019lng} for pure Higgsinos are overlaid in blue dots.}
+	\subfloat[expected]{\includegraphics[width=0.75\textwidth]{{./figures/EWKino_pmssm_exp}}}\\
+	\subfloat[observed]{\includegraphics[width=0.75\textwidth]{{./figures/EWKino_pmssm_obs}}}
+	\caption{Expected (a) and observed (b) constraints on wino-bino-higgsino models containing three light neutralinos.  Black dots represent the specific model points used to calculate the fraction of excluded models within a bin, shown in color.  White bins contain no models from the current scan.  Results from an ATLAS search~\cite{ATLAS:2019lng} for pure Higgsinos are overlaid in blue dots.}
 	\label{fig:EWKino_pmssm}
 \end{figure}
 
