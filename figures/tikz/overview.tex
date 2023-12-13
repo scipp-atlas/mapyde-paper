@@ -50,7 +50,9 @@
 	edge [<-, line width=1.0pt] node[auto, sloped] {ROOT} (delphes)
 	edge [<-, line width=1.0pt] node[auto, sloped] {ROOT} (simpleanalysis);
 
-	\node[left=3cm of madgraph] (runcard) {\texttt{Run Card}}
+	\node[above left=0.5cm and 3cm of madgraph] (paramcard) {\texttt{Param Card}}
+	edge [->, line width=1.0pt] node[auto] {} (madgraph);
+	\node[below=1cm of paramcard] (runcard) {\texttt{Run Card}}
 	edge [->, line width=1.0pt] node[auto] {} (madgraph);
 	\node[below=1cm of runcard] (proccard) {\texttt{Process Card}}
 	edge [->, line width=1.0pt] node[auto] {} (madgraph);
@@ -60,7 +62,7 @@
 	edge [->, line width=1.0pt] node[auto] {} (delphes);
 
 	\begin{scope}[on background layer]
-		\node [label={below:User Configuration}, minimum width=4cm, inner sep=0.5cm, boxit=green, fit=(runcard) (proccard) (pythiacard) (delphescard)] {};
+		\node [label={below:User Configuration}, minimum width=4cm, inner sep=0.5cm, boxit=green, fit=(paramcard) (runcard) (proccard) (pythiacard) (delphescard)] {};
 		\node [label={below:Event Generation and Detector Simulation}, inner sep=0.5cm, boxit, fit=(madgraph) (pythia) (delphes)] {};
 		\node [label={below:ATLAS-specific}, inner sep=0.5cm, boxit=orange, fit=(simpleanalysis)] {};
 		\node [label={above:Statistical Fit}, inner sep=0.5cm, boxit=red, fit=(pyhf)] {};
