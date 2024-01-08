@@ -124,10 +124,10 @@ In this paper we present a new pipeline for calculating the constraints on new p
 	\label{fig:mapydeoverview}
 \end{figure}
 
-This paper describes the implementation of, and results obtained with, version \texttt{v0.5.0} of \mapyde.  The \mapyde{} package provides support for using the following tools:
+This paper describes the implementation of, and results obtained with, version \texttt{v0.5.0} of \mapyde.  This package can be installed via \texttt{pip}~\cite{pypi} or \texttt{conda}~\cite{anaconda}, as shown in~\Cref{lst:install}. The \mapyde{} package provides support for using the following tools:
 
 \begin{itemize}
-	\item \madgraphfull (\madgraph)~\cite{Alwall:2014hca,Frederix:2018nkq} (event generation)
+	\item \madgraphfull{} (\madgraph)~\cite{Alwall:2014hca,Frederix:2018nkq} (event generation)
 	\item \pythia~\cite{Bierlich:2022pfr} (parton shower, hadronization, decays)
 	\item \delphes~\cite{deFavereau:2013fsa,Selvaggi:2014mya,Mertens:2015kba} (detector simulation)
 	\item \simpleanalysis~\cite{simpleanalysis,atlas_simpleanalysis} (analysis description)
@@ -135,6 +135,17 @@ This paper describes the implementation of, and results obtained with, version \
 \end{itemize}
 
 and was named after the first three tools in a typical \mapyde{} simulation pipeline: \madgraph, \pythia, and \delphes{} (\textsc{MaPyDe}).  Additional tools, such as those listed in \Cref{sec:introduction}, can be supported in the analysis pipeline of this flexible framework with a little extra custom configuration, and they can be more natively supported in future versions of \mapyde{} upon request or by pull requests from external contributors.  A flow chart illustrating the role of different tools in the \mapyde{} pipeline is shown in~\Cref{fig:mapydeoverview}.
+
+\begin{listing}[H]
+	\begin{minted}[frame=single,framesep=2mm]{bash}
+    python -m pip install mapyde  # via pypi
+    pipx install mapyde  # via pypi
+    conda install -c conda-forge mapyde  # via conda-forge
+    mamba install mapyde  # via conda-forge
+  \end{minted}
+	\caption{Snippet illustrating various ways to install \mapyde.}
+	\label{lst:install}
+\end{listing}
 
 A \mapyde{} pipeline is constructed as a series of containerized transforms, with the \mapyde{} package providing configuration and steering of the individual stages.  The use of containers allows the \mapyde{} package to remain lightweight and easy to install, while still enabling event generation/simulation and subsequent data analysis steps to run on any system that provides \docker{} or \singularity/\apptainer.  Default containers are provided for \madgraph+\pythia, for \delphes, and for probability model fitting with \pyhf.  The ATLAS collaboration provides containers that implement the \simpleanalysis{} routines for many SUSY searches, including those reinterpreted in \Cref{sec:reinterpreting-compressed-susy-searches-from-atlas}.  Containers for a variety of different \madgraph+\pythia{} releases are provided in the \mapyde{} \texttt{GitHub} container registry~\cite{MapydeRegistry}.  Users can also provide their own containers for any stage of the analysis.
 
