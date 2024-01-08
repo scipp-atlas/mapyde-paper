@@ -478,18 +478,6 @@ module Efficiency ElectronEfficiency {
   set OutputArray electrons
 
   # set EfficiencyFormula {efficiency formula as a function of eta and pt}
-
-  # efficiency formula for electrons
-    # set EfficiencyFormula {                    (pt <  4.5)              * (0.00) +
-    # 	                   (abs(eta) <= 2.5) * (pt < 5.0) * (pt >= 4.5) * (0.25) +
-    # 	                   (abs(eta) <= 2.5) * (pt < 6.0) * (pt >= 5.0) * (0.40) +
-    # 	                   (abs(eta) <= 2.5) * (pt < 8.0) * (pt >= 6.0) * (0.50) +
-    # 	                   (abs(eta) <= 2.5) * (pt < 10)  * (pt >= 8.0) * (0.60) +
-    # 	                   (abs(eta) <= 2.5) * (pt < 20)  * (pt >= 10)  * (0.65) +
-    # 	                   (abs(eta) <= 2.5) * (pt < 30)  * (pt >= 20)  * (0.70) +
-    # 	                   (abs(eta) <= 2.5) * (pt < 50)  * (pt >= 30)  * (0.75) +
-    # 	                   (abs(eta) <= 2.5) * (pt >= 50)               * (0.87) +
-    #                        (abs(eta) > 2.5)                             * (0.00)}
     set EfficiencyFormula {                    (pt <  4.5)              * (0.00) +
     	                   (abs(eta) <= 2.5) * (pt < 5.0) * (pt >= 4.5) * (0.30) +
     	                   (abs(eta) <= 2.5) * (pt < 6.0) * (pt >= 5.0) * (0.45) +
@@ -529,17 +517,6 @@ module Efficiency MuonEfficiency {
 
   # set EfficiencyFormula {efficiency as a function of eta and pt}
 
-  # efficiency formula for muons
-    # set EfficiencyFormula {                    (pt <  3.0)              * (0.00) +
-    # 	                   (abs(eta) <= 2.7) * (pt < 3.5) * (pt >= 3.0) * (0.50) +
-    # 	                   (abs(eta) <= 2.7) * (pt < 4.5) * (pt >= 3.5) * (0.65) +
-    # 	                   (abs(eta) <= 2.7) * (pt < 7.0) * (pt >= 4.5) * (0.70) +
-    # 	                   (abs(eta) <= 2.7) * (pt < 15)  * (pt >= 7.0) * (0.75) +
-    # 	                   (abs(eta) <= 2.7) * (pt < 20)  * (pt >= 15)  * (0.80) +
-    # 	                   (abs(eta) <= 2.7) * (pt < 30)  * (pt >= 20)  * (0.83) +
-    # 	                   (abs(eta) <= 2.7) * (pt < 50)  * (pt >= 30)  * (0.90) +
-    # 	                   (abs(eta) <= 2.7) * (pt >= 50)               * (0.93) +
-    #                        (abs(eta) > 2.7)                             * (0.00)}
   set EfficiencyFormula {                    (pt <  3.0)              * (0.00) +
     	                 (abs(eta) <= 2.7) * (pt < 3.5) * (pt >= 3.0) * (0.65) +
     	                 (abs(eta) <= 2.7) * (pt < 4.5) * (pt >= 3.5) * (0.72) +
