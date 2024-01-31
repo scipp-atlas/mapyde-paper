@@ -12,10 +12,10 @@
 	\fmflabel{\color{red}\ninoone}{LSP1}
 
 	\fmf{plain}{v1,f1}
-	\fmflabel{\fermion}{f1}
+	\fmflabel{\leptonp}{f1}
 
 	\fmf{plain}{v1,f2}
-	\fmflabel{\fermion}{f2}
+	\fmflabel{\leptonm}{f2}
 
 	% LOWER CASCADE, EDIT BELOW
 	\fmf{ewkino,lab=\color{red}$\chinotwopm$,lab.side=right,fore=red,tension=2}{ppVertex,v2}
@@ -30,12 +30,15 @@
 	\fmf{plain}{NLSP,f4}
 	\fmflabel{\fermion}{f4}
 
-	\fmf{boson}{v2,W}
-	\fmflabel{$W^\pm$}{W}
+	\fmf{plain}{v2,f5}
+	\fmflabel{\fermion}{f5}
+
+	\fmf{plain}{v2,f6}
+	\fmflabel{\fermion}{f6}
 
 	% ORDER OF FINAL PARTICLES: BOTTOM, RIGHT, TOP
 	\fmfright{f4,f3,LSP2,LSP1,f2,f1}
-	\fmfbottom{,,W,}
+	\fmfbottom{,,f6,f5,,}
 
 \end{fmfgraph*}
 \input{footer.tex}
