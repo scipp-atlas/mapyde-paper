@@ -15,6 +15,7 @@ tar -cvf mapyde_arxiv.tar \
     figures/*.pdf \
     figures/feynman/output/* \
     figures/tikz/output/* \
+    figures/tui.png \
     _minted-main/*
 
 gzip mapyde_arxiv.tar
